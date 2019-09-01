@@ -40,7 +40,8 @@ sub1 = excode["衬底1"]
 sub2 = excode["衬底2"]
 metaltype = excode["金属网"]
 note = excode["实验目的"]
-time = excode["持续时间(min)"]
+time = int(excode["持续时间(min)"])
+SR = int(excode["方阻(kΩ/□)"])
 
 #开始对EXCEL进行编辑
 #创建app进程
@@ -62,10 +63,12 @@ rowl = row + 1
 rowl = str(rowl)
 print(rowl)
 # 创建数据列
-data = [note,metaltype,Ar,H2,CH4,time,power,pressure,temp]
+data = [note,metaltype,Ar,H2,CH4,time,power,pressure,temp,SR]
 print(data)
 #写入最下面一行的数据
 sht.range('N'+rowl,'W'+rowl).value = data
+sht.range('AE'+rowl).value = date
+
 #保存文件
 wb.save()
 # 关闭文件
