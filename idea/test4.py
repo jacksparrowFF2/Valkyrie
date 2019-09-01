@@ -13,8 +13,8 @@
 # here put the import lib
 import xlwings as xw
 #1
-# wb = xw.Book('Report_Quartz_2019_Condition.xlsx')
-# sht = wb.sheets['Ratio Metadata']
+
+
 #2
 app = xw.App(visible=False,add_book=False)
 wb = app.books.open('Report_Quartz_2019_Condition.xlsx')

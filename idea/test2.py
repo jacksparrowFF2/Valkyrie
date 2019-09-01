@@ -39,3 +39,7 @@ metaltype = excode["金属网"]
 note = excode["实验目的"]
 
 print(date, power, Ar, H2, CH4, pressure, temp, sub1+sub2, metaltype, note)
+# l = []
+l = [date,power,Ar,H2,CH4,pressure,temp,sub1+sub2,metaltype,note]
+
+print(l)
