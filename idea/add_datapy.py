@@ -61,14 +61,19 @@ col = info.last_cell.column
 # 计算出要添加的一行位置
 rowl = row + 1
 rowl = str(rowl)
+row = str(row)
 print(rowl)
+print(row)
+
 # 创建数据列
 data = [note,metaltype,Ar,H2,CH4,time,power,pressure,temp,SR]
 print(data)
 #写入最下面一行的数据
+middata = sht.range('A'+row,'AF'+row).value
+print(middata)
+sht.range('A'+rowl,'AF'+rowl).value = middata
 sht.range('N'+rowl,'W'+rowl).value = data
 sht.range('AE'+rowl).value = date
-
 #保存文件
 wb.save()
 # 关闭文件
