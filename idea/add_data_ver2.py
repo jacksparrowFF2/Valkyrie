@@ -18,6 +18,7 @@ import win32con
 import ast
 import xlwings as xw
 from excel_formula import  A,J,K,L,X,Y,Z,AA,AB,AC
+from get_table_info import app,wb,sht,info,row,rowl
 
 #获取剪贴板内容
 def getCopyText():
@@ -74,7 +75,7 @@ print(row)
 data = [note,metaltype,Ar,H2,CH4,time,power,pressure,temp,SR]
 print(data)
 #注入实验条件数据
-# sht.range('N'+rowl,'W'+rowl).value = data
+sht.range('N'+rowl,'W'+rowl).value = data
 sht.range('AD'+rowl).value = date
 #注入Eecel公式
 sht.range('A'+rowl).formula = A

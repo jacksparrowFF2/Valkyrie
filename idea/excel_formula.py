@@ -90,13 +90,31 @@ AA = '=P'+rowl+'&"/"&'+'Q'+rowl+'&"/"&'+'R'+rowl
 AB  = '=X'+rowl+'&"/"&'+'Y'+rowl+'&"/"&'+'Z'+rowl
 # print(AB)
 
-# TAG1
+# AC
 # Excel原始公式
 # =O84&"/"&P84&"/"&Q84&"/"&R84&"/"&S84&"/"&T84&"/"&U84&"/"&V84
 # Excel公式定义
 AC = '=O'+rowl+'&"/"&'+'P'+rowl+'&"/"&'+'Q'+rowl+'&"/"&'+'R'+rowl+'&"/"&'+'S'+rowl+'&"/"&'+'T'+rowl+'&"/"&'+'U'+rowl+'&"/"&'+'V'+rowl
-# print(TAG1)
+# print(AC)
+
+
+print(A)
+print(J)
+print(K)
+print(L)
+print(M)
+print(X)
+print(Y)
+print(Z)
+print(AA)
+print(AB)
+print(AC)
 
 
 
-
+#保存文件
+wb.save()
+# 关闭文件
+wb.close()
+# 结束进程
+app.kill
