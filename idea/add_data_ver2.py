@@ -17,6 +17,7 @@ import win32clipboard as wc
 import win32con
 import ast
 import xlwings as xw
+import get_table_info
 from excel_formula import  A,J,K,L,X,Y,Z,AA,AB,AC
 from get_table_info import app,wb,sht,info,row,rowl
 
@@ -33,7 +34,7 @@ excode = ast.literal_eval(getCopyText())
 #输出变量类型
 print(type(excode))
 
-date = int(excode["日期"])
+date = excode["日期"]
 power = int(excode["初始输入功率(w)"])-int(excode["初始反馈功率(w)"])
 Ar = int(excode["Ar(sccm)"])
 H2 = int(excode["H2(sccm)"])
@@ -47,7 +48,7 @@ note = excode["实验目的"]
 time = int(excode["持续时间(min)"])
 SR = int(excode["方阻(kΩ/□)"])
 
-#开始对EXCEL进行编辑
+""" #开始对EXCEL进行编辑
 #创建app进程
 app = xw.App(visible=False,add_book = False)
 # 链接工作表
@@ -59,17 +60,15 @@ sht = wb.sheets['Ratio MetaData']
 # sht = wb.sheets['Ratio Metadata']
 # 获取当前EXCEL表格的行数与列数
 info = sht.range('A1').expand('table')
-print(info)
 row = info.last_cell.row
 col = info.last_cell.column
+print(info)
 # 计算出要添加的一行位置
 
-rowl = row + 1
-rowl = str(rowl)
-print(rowl)
+rowl =str(row + 1)
+print('数据添加所在行：'+rowl)
 row = str(row)
-print(row)
-
+print('原表格最后一行：'+rowl) """
 
 # 创建数据列
 data = [note,metaltype,Ar,H2,CH4,time,power,pressure,temp,SR]

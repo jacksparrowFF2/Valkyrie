@@ -30,8 +30,7 @@ row = info.last_cell.row
 col = info.last_cell.column
 # 计算出要添加的一行位置
 
-rowl = row + 1
-rowl = str(rowl)
-print(rowl)
+rowl =str(row + 1)
+print('数据添加所在行：'+rowl)
 row = str(row)
-print(row)
+print('原表格最后一行：'+row)

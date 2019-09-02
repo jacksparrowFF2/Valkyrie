@@ -97,24 +97,24 @@ AB  = '=X'+rowl+'&"/"&'+'Y'+rowl+'&"/"&'+'Z'+rowl
 AC = '=O'+rowl+'&"/"&'+'P'+rowl+'&"/"&'+'Q'+rowl+'&"/"&'+'R'+rowl+'&"/"&'+'S'+rowl+'&"/"&'+'T'+rowl+'&"/"&'+'U'+rowl+'&"/"&'+'V'+rowl
 # print(AC)
 
+""" #检查公式是否正确，如果正确请注释
+print('A'+A)
+print('J'+J)
+print('K'+K)
+print('L'+L)
+print('X'+X)
+print('Y'+Y)
+print('Z'+Z)
+print('AA'+AA)
+print('AB'+AB)
+print('AC'+AC) """
 
-print(A)
-print(J)
-print(K)
-print(L)
-print(M)
-print(X)
-print(Y)
-print(Z)
-print(AA)
-print(AB)
-print(AC)
+a = sht.range('A'+row).value
+print(a)
 
-
-
-#保存文件
+""" #保存文件
 wb.save()
 # 关闭文件
 wb.close()
 # 结束进程
-app.kill
+app.kill """
