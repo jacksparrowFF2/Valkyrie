@@ -1,20 +1,22 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@File    :   add_datapy.py
-@Time    :   2019/09/01 20:14:24
+@File    :   add_data.py
+@Time    :   2019/09/02 11:01:26
 @Author  :   SPH 
 @Version :   1.0
 @Contact :   s.ph@outlook.com
-@License :   (C)Copyright 2017-2018, Liugroup-NLPR-CASIA
+@License :   (C)Copyright 2018-2019, Liugroup-NLPR-CASIA
 @Desc    :   None
 '''
 
 # here put the import lib
+
 import win32clipboard as wc
 import win32con
 import ast
 import xlwings as xw
+from excel_formula import  A,J,K,L,X,Y,Z,AA,AB,AC
 
 #获取剪贴板内容
 def getCopyText():
@@ -59,26 +61,32 @@ print(info)
 row = info.last_cell.row
 col = info.last_cell.column
 # 计算出要添加的一行位置
+
 rowl = row + 1
 rowl = str(rowl)
-row = str(row)
 print(rowl)
+row = str(row)
 print(row)
+
 
 # 创建数据列
 data = [note,metaltype,Ar,H2,CH4,time,power,pressure,temp,SR]
 print(data)
-#写入最下面一行的数据
-middata = sht.range('A'+row,'AF'+row)#引用区域
-print(middata)
-sht.range('A'+rowl,'AF'+rowl).value= middata
+#注入实验条件数据
 # sht.range('N'+rowl,'W'+rowl).value = data
-# sht.range('AE'+rowl).value = date
-sht.range('AE'+rowl).value = date
+sht.range('AD'+rowl).value = date
+#注入Eecel公式
+sht.range('A'+rowl).formula = A
+sht.range('J'+rowl).formula = J
+sht.range('K'+rowl).formula = K
+sht.range('L'+rowl).formula = L
+sht.range('X'+rowl).formula = X
+sht.range('Y'+rowl).formula = Y
+sht.range('Z'+rowl).formula = Z
 
-sht.range('B'+rowl).formula = 2
-sht.range('D'+rowl).formula = 1
-sht.range('J'+rowl).formula = '=B'+rowl+'/D'+rowl
+sht.range('AA'+rowl).formula = AA
+sht.range('AB'+rowl).formula = AB
+sht.range('AC'+rowl).formula = AC
 #保存文件
 wb.save()
 # 关闭文件
