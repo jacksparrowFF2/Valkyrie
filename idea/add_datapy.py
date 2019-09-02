@@ -69,11 +69,16 @@ print(row)
 data = [note,metaltype,Ar,H2,CH4,time,power,pressure,temp,SR]
 print(data)
 #写入最下面一行的数据
-middata = sht.range('A'+row,'AF'+row).value
+middata = sht.range('A'+row,'AF'+row)#引用区域
 print(middata)
-sht.range('A'+rowl,'AF'+rowl).value = middata
-sht.range('N'+rowl,'W'+rowl).value = data
+sht.range('A'+rowl,'AF'+rowl).value= middata
+# sht.range('N'+rowl,'W'+rowl).value = data
+# sht.range('AE'+rowl).value = date
 sht.range('AE'+rowl).value = date
+
+sht.range('B'+rowl).formula = 2
+sht.range('D'+rowl).formula = 1
+sht.range('J'+rowl).formula = '=B'+rowl+'/D'+rowl
 #保存文件
 wb.save()
 # 关闭文件
