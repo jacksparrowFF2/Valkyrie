@@ -238,7 +238,7 @@ L = '=I'+rowl+'/E'+rowl
 M = '=C'+rowl+'/G'+rowl
 # print(M)
 
-# N 石墨烯层数
+# N 层数
 # Excel原始公式
 # =IF(88>J84,45/(88-J84),"bulk")
 # Excel公式定义
@@ -249,21 +249,21 @@ N = '=IF(88>J'+rowl+',45/(88-J'+rowl+'),"bulk")'
 # Excel原始公式
 # =Q84*1.415
 # Excel公式定义
-Y = '=Q'+rowl+'*1.415'
+Y = '=Q'+rowl+'*1'
 # print(Y)
 
 # Z 氢气
 # Excel原始公式
 # =R84*1.01
 # Excel公式定义
-Z = '=R'+rowl+'*1.01'
+Z = '=R'+rowl+'*2'
 # print(Z)
 
 # AA
 # Excel原始公式
 # =S84*0.719
 # Excel公式定义
-AA = '=S'+rowl+'*0.719'
+AA = '=S'+rowl+'3'
 # print(AA)
 
 # AB 气体流量比
