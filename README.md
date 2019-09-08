@@ -4,19 +4,11 @@
 
 ## 开始
 
-## 安装 Quicker
+### 安装 Quicker
 
-> 可能是 Windows 最好的「Workflow」、
+> 可能是 Windows 最好的「Workflow」
 
 软件官网：https://getquicker.net/
-
-模板处理动作：
-
-
-
-复制到软件并粘贴：
-
-
 
 ### 安装 Scoop
 
@@ -128,48 +120,45 @@ pip3 install pywin32
 模板的创建时为了程序能够正常的读取并写入到数据库中，在此给出模板要遵循的格式：
 
 ```python
-{
-	中文/英文/中文+英文/纯数字/符号:中文/英文/中文+英文/纯数字/符号
-}
+名称:值
 ```
 
 例子：
 
 ```python
-{
-	日期:20190907_01_01
-	date:20190907_01_01
-	实验目的:改变
-	初始输入功率(w):81
-	Ar(sccm):100
-	衬底2:Quartz
-	金属网:MK1 铜网1_1
-	初步实验结果:ssAA啊啊啊
-	方阻(kΩ/□):1
-}
-```
-
-为了确保能够将模板中的内容处理为 Python 能够识别的格式，可以先用 正则表达式 对其进行匹配并测试。
-
-```python
-{
-	"日期":"20190907_01_01",
-	"date":"20190907_01_01",
-	"实验目的":"改变",
-	"初始输入功率(w)":"81",
-	"Ar(sccm)":"100",
-	"衬底2":"Quartz",
-	"金属网":"MK1 铜网1_1",
-	"初步实验结果":"ssAA啊啊啊",
-	"方阻(kΩ/□)":"1",
-}
+日期:20190607_01_00
+实验目的:
+实验过程:没有出现故障
+初始输入功率(w):81
+初始反馈功率(w):31
+末端输入功率(w):86
+末端反馈功率(w):36
+Ar(sccm):150
+H2(sccm):5
+CH4(sccm):9
+压强(pa):300
+温度(℃):600
+持续时间(min):120
+衬底1:
+衬底2:Quartz
+金属网:MK0 镍网0.5_1.6
+初步实验结果:
+方阻(kΩ/□):1
 ```
 
 
 
 ## 程序
 
+### 克隆仓库
+
+将程序克隆到本地，使用编辑器对程序进行自定义编辑，并按照以下说明依次测试确保能够正确使用。
+
 请注意，程序的正常运行依赖于模板，能够正确处理模板的信息时自动填写实验数据的第一步。
+
+此外，为了降低因文件路径而引起的 BUG，请将程序放置于实验记录Excel同一文件夹内。
+
+下面开始对三个程序进行简要的介绍和说明，希望你不会感到太多的疑惑。
 
 ### get.py
 
@@ -211,10 +200,10 @@ print('原表格最后一行：'+row)
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
-from get import app, wb, sht, info, row, rowl
 import get
-# 定义全局变量，建议用 EXCEL 的列编号定义变量名称
-global A, J, K, L, X, Y, Z, AA, AB, AC
+from get import app, info, row, rowl, sht, wb
+
+global A, K, L, M, N, Y, Z, AA, AB, AC, AD
 
 # 测试用变量 开始
 # rowl = 10
@@ -223,108 +212,105 @@ global A, J, K, L, X, Y, Z, AA, AB, AC
 
 # A
 # Excel原始公式
-# =AD84&CHAR(10)&AC84
+# =B84&CHAR(10)&AC84
 # Excel公式定义
-A = '=AD'+rowl+'&CHAR(10)&AC'+rowl
+A = '=B'+rowl+'&CHAR(10)&AD'+rowl
 # print(A)
 
-# J
-# Excel原始公式
-# =B84/D84
-# Excel公式定义
-J = '=B'+rowl+'/D'+rowl
-# print(J)
-
-# K
+# K ID/IG
 # Excel原始公式
 # =H84/D84
 # Excel公式定义
-K = '=H'+rowl+'/D'+rowl
+K = '=C'+rowl+'/E'+rowl
 # print(K)
 
-# L
+# L IG'/IG
 # Excel原始公式
 # =B84/F84
 # Excel公式定义
-L = '=B'+rowl+'/F'+rowl
+L = '=I'+rowl+'/E'+rowl
 # print(L)
 
-# M
+# M ID/ID'
 # Excel原始公式
-# =IF(88>I84,45/(88-I84),"bulk")
+# =C84/G84
 # Excel公式定义
-M = '=IF(88>I'+rowl+',45/(88-I'+rowl+'),"bulk")'
+M = '=C'+rowl+'/G'+rowl
 # print(M)
 
-# X
+# N 石墨烯层数
 # Excel原始公式
-# =P84*1.415
+# =IF(88>J84,45/(88-J84),"bulk")
 # Excel公式定义
-X = '=P'+rowl+'*1.415'
-# print(X)
+N = '=IF(88>J'+rowl+',45/(88-J'+rowl+'),"bulk")'
+# print(J)
 
-# Y
+# Y 真实氩气
 # Excel原始公式
-# =Q84*1.01
+# =Q84*1.415
 # Excel公式定义
-Y = '=Q'+rowl+'*1.01'
+Y = '=Q'+rowl+'*1.415'
 # print(Y)
 
-# Z
+# Z 氢气
 # Excel原始公式
-# =R84*0.719
+# =R84*1.01
 # Excel公式定义
-Z = '=R'+rowl+'*0.719'
+Z = '=R'+rowl+'*1.01'
 # print(Z)
 
 # AA
 # Excel原始公式
-# =P84&"/"&Q84&"/"&R84
+# =S84*0.719
 # Excel公式定义
-AA = '=P'+rowl+'&"/"&'+'Q'+rowl+'&"/"&'+'R'+rowl
+AA = '=S'+rowl+'*0.719'
 # print(AA)
 
-# AB
+# AB 气体流量比
 # Excel原始公式
-# =X84&"/"&Y84&"/"&Z84
+# =Q84&"/"&R84&"/"&S84
 # Excel公式定义
-AB = '=X'+rowl+'&"/"&'+'Y'+rowl+'&"/"&'+'Z'+rowl
+AB = '=Q'+rowl+'&"/"&'+'R'+rowl+'&"/"&'+'S'+rowl
 # print(AB)
 
-# AC
+# AC 真实气体流量
 # Excel原始公式
-# =O84&"/"&P84&"/"&Q84&"/"&R84&"/"&S84&"/"&T84&"/"&U84&"/"&V84
+# =Y84&"/"&Z84&"/"&AA84
 # Excel公式定义
-AC = '=O'+rowl+'&"/"&'+'P'+rowl+'&"/"&'+'Q'+rowl+'&"/"&'+'R'+rowl + \
-    '&"/"&'+'S'+rowl+'&"/"&'+'T'+rowl+'&"/"&'+'U'+rowl+'&"/"&'+'V'+rowl
+AC = '=Y'+rowl+'&"/"&'+'Z'+rowl+'&"/"&'+'AA'+rowl
 # print(AC)
 
-#检查公式是否正确，如果输出正确请注释
-print('A'+A)
-print('J'+J)
-print('K'+K)
-print('L'+L)
-print('X'+X)
-print('Y'+Y)
-print('Z'+Z)
-print('AA'+AA)
-print('AB'+AB)
-print('AC'+AC) 
+# AD TAG1
+# Excel原始公式
+# =P2&"/"&Q2&"/"&R2&"/"&S2&"/"&T2&"/"&U2&"/"&V2&"/"&W2
+# Excel公式定义
+AD = '=P'+rowl+'&"/"&'+'Q'+rowl+'&"/"&'+'R'+rowl+'&"/"&'+'S'+rowl+'&"/"&'+'T'+rowl+'&"/"&'+'U'+rowl+'&"/"&'+'V'+rowl+'&"/"&'+'W'+rowl
+# print(AD)
 
-# 测试第一个程序调用是否正常，如果调用正常请注释
+# 检查公式是否正确，如果正确请注释
+
+# print('A'+A)
+# print('K'+K)
+# print('L'+L)
+# print('M'+M)
+# print('N'+N)
+# print('Y'+Y)
+# print('Z'+Z)
+# print('AA'+AA)
+# print('AB'+AB)
+# print('AC'+AC)
+# print('AD'+AD)
+
+# 如果程序调用正确，请注释以下所有内容
 a = sht.range('A'+row).value
 print(a)
 
-# 如果这个程序执行正常，请将下面这段程序注释
-
-# 保存文件
+#保存文件
 wb.save()
 # 关闭文件
 wb.close()
 # 结束进程
 app.kill
-
-
 ```
 
 ### Write.py
@@ -333,18 +319,16 @@ app.kill
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+
 # 导入剪贴板相关模块
 import win32clipboard as wc
 import win32con
-# 导入 ast,用于将字符串类型转变为字典类型
-import ast
-# 导入 Excel 操作相关模块
 import xlwings as xw
 # 导入第一个程序
 import get
 # 导入变量
-from excel_formula import A, J, K, L, X, Y, Z, AA, AB, AC
-from get import app, wb, sht, info, row, rowl
+from excel_formula import AA, AB, AC, AD, A, K, L, M, N, Y, Z
+from get import app, info, row, rowl, sht, wb
 
 # 获取剪贴板内容
 def getCopyText():
@@ -354,8 +338,18 @@ def getCopyText():
     return copy_text
 
 
-# 将字符串类型转变为字典类型
-excode = ast.literal_eval(getCopyText())
+# 开始对剪贴板内容进行格式化，格式化为字典
+excode_a = getCopyText()
+excode_b = excode_a.split('\n')
+excode_c = []
+for i in excode_b:
+    i = i.replace('\r', '')
+    excode_c.append(i.split(':'))
+
+excode = {}
+for i in range(len(excode_c)):
+    excode[excode_c[i][0]] = excode_c[i][1]
+print(excode)
 
 # 输出变量类型，确保为字典类型
 print(type(excode))
@@ -376,25 +370,25 @@ time = int(excode["持续时间(min)"])
 SR = int(excode["方阻(kΩ/□)"])
 
 # 创建实验条件数据列
-data = [note, metaltype, Ar, H2, CH4, time, power, pressure, temp, SR]
-# 验证数据列是否正确，如果正确请注释下面一行程序
-print(data) 
+data = [note+"+"+sub1+"+"+sub2, metaltype, Ar, H2, CH4, time, power, pressure, temp, SR]
+# print(data) # 验证数据列是否正确
 
 # 注入实验条件数据
-sht.range('N'+rowl, 'W'+rowl).value = data
-sht.range('AD'+rowl).value = date
+sht.range('O'+rowl, 'X'+rowl).value = data
+sht.range('B'+rowl).value = date
 
 # 注入Eecel公式
 sht.range('A'+rowl).formula = A
-sht.range('J'+rowl).formula = J
 sht.range('K'+rowl).formula = K
 sht.range('L'+rowl).formula = L
-sht.range('X'+rowl).formula = X
+sht.range('M'+rowl).formula = M
+sht.range('N'+rowl).formula = N
 sht.range('Y'+rowl).formula = Y
 sht.range('Z'+rowl).formula = Z
 sht.range('AA'+rowl).formula = AA
 sht.range('AB'+rowl).formula = AB
 sht.range('AC'+rowl).formula = AC
+sht.range('AD'+rowl).formula = AD
 
 # 保存文件
 wb.save()
@@ -405,3 +399,20 @@ app.kill
 
 ```
 
+对上述程序配置完成后，请保存并进行测试，如果测试通过，复制要进行写入的实验条件，执行 `Write.py`，大约 5 秒后，写入完成。
+
+## 解决方案
+
+我对于这个项目希望它未来能做到全平台化(Win、Mac、Linux、IOS、Android)，能够集实验数据汇总、读取、云同步、案例对比和周汇报报告生成为一体。
+
+目前因为个人能力有限，暂时只做到了实验数据的写入，以后会尝试写一个 UI 界面吧，不知道在研究生期间能不能完成，也许这个饼永远都不会完成。
+
+我目前的解决方案：
+
++ 采用 ideaNote 进行实验记录的云同步
++ 使用 坚果云 同步所有的实验数据
++ Excel、Origin 进行数据分析
+
+## 最后
+
+希望这个小小的程序能够解决你的一部分痛点。

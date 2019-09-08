@@ -2,24 +2,26 @@
 # -*- encoding: utf-8 -*-
 '''
 @File    :   write.py
-@Time    :   2019/09/02 14:28:07
+@Time    :   2019/09/08 12:00:16
 @Author  :   SPH 
 @Version :   1.0
 @Contact :   s.ph@outlook.com
-@License :   (C)Copyright 2018-2019, Liugroup-NLPR-CASIA
+@License :   (C)Copyright 2018-2019, EXphysiclab
 @Desc    :   None
 '''
 
 # here put the import lib
 
 
+# 导入 ast,用于将字符串类型转变为字典类型
 import ast
-
+# 导入剪贴板相关模块
 import win32clipboard as wc
 import win32con
 import xlwings as xw
-
+# 导入第一个程序
 import get
+# 导入变量
 from excel_formula import AA, AB, AC, AD, A, K, L, M, N, Y, Z
 from get import app, info, row, rowl, sht, wb
 
