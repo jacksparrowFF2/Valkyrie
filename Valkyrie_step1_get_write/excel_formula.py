@@ -12,9 +12,10 @@
 
 # here put the import lib
 
-from get import app, wb, sht, info, row, rowl
 import get
-global A, J, K, L, X, Y, Z, AA, AB, AC
+from get import app, info, row, rowl, sht, wb
+
+global A, K, L, M, N, Y, Z, AA, AB, AC, AD
 
 # 测试用变量 开始
 # rowl = 10
@@ -23,96 +24,97 @@ global A, J, K, L, X, Y, Z, AA, AB, AC
 
 # A
 # Excel原始公式
-# =AD84&CHAR(10)&AC84
+# =B84&CHAR(10)&AC84
 # Excel公式定义
-A = '=AD'+rowl+'&CHAR(10)&AC'+rowl
+A = '=B'+rowl+'&CHAR(10)&AD'+rowl
 # print(A)
 
-# J
-# Excel原始公式
-# =B84/D84
-# Excel公式定义
-J = '=B'+rowl+'/D'+rowl
-# print(J)
-
-# K
+# K ID/IG
 # Excel原始公式
 # =H84/D84
 # Excel公式定义
-K = '=H'+rowl+'/D'+rowl
+K = '=C'+rowl+'/E'+rowl
 # print(K)
 
-# L
+# L IG'/IG
 # Excel原始公式
 # =B84/F84
 # Excel公式定义
-L = '=B'+rowl+'/F'+rowl
+L = '=I'+rowl+'/E'+rowl
 # print(L)
 
-# M
+# M ID/ID'
 # Excel原始公式
-# =IF(88>I84,45/(88-I84),"bulk")
+# =C84/G84
 # Excel公式定义
-M = '=IF(88>I'+rowl+',45/(88-I'+rowl+'),"bulk")'
+M = '=C'+rowl+'/G'+rowl
 # print(M)
 
-# X
+# N 石墨烯层数
 # Excel原始公式
-# =P84*1.415
+# =IF(88>J84,45/(88-J84),"bulk")
 # Excel公式定义
-X = '=P'+rowl+'*1.415'
-# print(X)
+N = '=IF(88>J'+rowl+',45/(88-J'+rowl+'),"bulk")'
+# print(J)
 
-# Y
+# Y 真实氩气
 # Excel原始公式
-# =Q84*1.01
+# =Q84*1.415
 # Excel公式定义
-Y = '=Q'+rowl+'*1.01'
+Y = '=Q'+rowl+'*1.415'
 # print(Y)
 
-# Z
+# Z 氢气
 # Excel原始公式
-# =R84*0.719
+# =R84*1.01
 # Excel公式定义
-Z = '=R'+rowl+'*0.719'
+Z = '=R'+rowl+'*1.01'
 # print(Z)
 
 # AA
 # Excel原始公式
-# =P84&"/"&Q84&"/"&R84
+# =S84*0.719
 # Excel公式定义
-AA = '=P'+rowl+'&"/"&'+'Q'+rowl+'&"/"&'+'R'+rowl
+AA = '=S'+rowl+'*0.719'
 # print(AA)
 
-# AB
+# AB 气体流量比
 # Excel原始公式
-# =X84&"/"&Y84&"/"&Z84
+# =Q84&"/"&R84&"/"&S84
 # Excel公式定义
-AB = '=X'+rowl+'&"/"&'+'Y'+rowl+'&"/"&'+'Z'+rowl
+AB = '=Q'+rowl+'&"/"&'+'R'+rowl+'&"/"&'+'S'+rowl
 # print(AB)
 
-# AC
+# AC 真实气体流量
 # Excel原始公式
-# =O84&"/"&P84&"/"&Q84&"/"&R84&"/"&S84&"/"&T84&"/"&U84&"/"&V84
+# =Y84&"/"&Z84&"/"&AA84
 # Excel公式定义
-AC = '=O'+rowl+'&"/"&'+'P'+rowl+'&"/"&'+'Q'+rowl+'&"/"&'+'R'+rowl + \
-    '&"/"&'+'S'+rowl+'&"/"&'+'T'+rowl+'&"/"&'+'U'+rowl+'&"/"&'+'V'+rowl
+AC = '=Y'+rowl+'&"/"&'+'Z'+rowl+'&"/"&'+'AA'+rowl
 # print(AC)
 
-""" #检查公式是否正确，如果正确请注释
-print('A'+A)
-print('J'+J)
-print('K'+K)
-print('L'+L)
-print('X'+X)
-print('Y'+Y)
-print('Z'+Z)
-print('AA'+AA)
-print('AB'+AB)
-print('AC'+AC) """
+# AD TAG1
+# Excel原始公式
+# =P2&"/"&Q2&"/"&R2&"/"&S2&"/"&T2&"/"&U2&"/"&V2&"/"&W2
+# Excel公式定义
+AD = '=P'+rowl+'&"/"&'+'Q'+rowl+'&"/"&'+'R'+rowl+'&"/"&'+'S'+rowl+'&"/"&'+'T'+rowl+'&"/"&'+'U'+rowl+'&"/"&'+'V'+rowl+'&"/"&'+'W'+rowl
+# print(AD)
 
-a = sht.range('A'+row).value
-print(a)
+# 检查公式是否正确，如果正确请注释
+
+# print('A'+A)
+# print('K'+K)
+# print('L'+L)
+# print('M'+M)
+# print('N'+N)
+# print('Y'+Y)
+# print('Z'+Z)
+# print('AA'+AA)
+# print('AB'+AB)
+# print('AC'+AC)
+# print('AD'+AD)
+
+# a = sht.range('A'+row).value
+# print(a)
 
 """ #保存文件
 wb.save()

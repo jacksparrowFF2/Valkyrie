@@ -14,13 +14,15 @@
 
 
 import xlwings as xw
+
 global app, wb, sht, info, row, rowl
 # 开始对EXCEL进行编辑
 # 方式1——隐性：EXCEL在后台运行
 # 创建app进程
 app = xw.App(visible=False, add_book=False)
-# 链接工作表
-wb = app.books.open('F:\github_graduate\Valkyrie\idea\Report_Quartz_2019_Condition.xlsx')#填写要写入的EXCEL文件路径
+# 链接工作表,填写要写入的EXCEL文件路径
+wb = app.books.open(
+    'F:\github_graduate\Valkyrie\idea\\test.xlsx')
 # 对指定工作表进行编辑
 sht = wb.sheets['Ratio MetaData']
 # 获取当前EXCEL表格的行数与列数
@@ -34,3 +36,11 @@ rowl = str(row + 1)
 print('数据添加所在行：'+rowl)
 row = str(row)
 print('原表格最后一行：'+row)
+
+""" #保存文件
+   wb.save()
+   # 关闭文件
+   wb.close()
+   # 结束进程
+   app.kill
+    """

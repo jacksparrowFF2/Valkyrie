@@ -13,17 +13,17 @@
 # here put the import lib
 
 
+import ast
+
 import win32clipboard as wc
 import win32con
-import ast
 import xlwings as xw
+
 import get
-from excel_formula import A, J, K, L, X, Y, Z, AA, AB, AC
-from get import app, wb, sht, info, row, rowl
+from excel_formula import AA, AB, AC, AD, A, K, L, M, N, Y, Z
+from get import app, info, row, rowl, sht, wb
 
 # 获取剪贴板内容
-
-
 def getCopyText():
     wc.OpenClipboard()
     copy_text = wc.GetClipboardData(win32con.CF_UNICODETEXT)
@@ -31,8 +31,18 @@ def getCopyText():
     return copy_text
 
 
-# 将字符串类型转变为字典类型
-excode = ast.literal_eval(getCopyText())
+# 开始对剪贴板内容进行格式化，格式化为字典
+excode_a = getCopyText()
+excode_b = excode_a.split('\n')
+excode_c = []
+for i in excode_b:
+    i = i.replace('\r', '')
+    excode_c.append(i.split(':'))
+
+excode = {}
+for i in range(len(excode_c)):
+    excode[excode_c[i][0]] = excode_c[i][1]
+print(excode)
 
 # 输出变量类型，确保为字典类型
 print(type(excode))
@@ -53,24 +63,25 @@ time = int(excode["持续时间(min)"])
 SR = int(excode["方阻(kΩ/□)"])
 
 # 创建实验条件数据列
-data = [note, metaltype, Ar, H2, CH4, time, power, pressure, temp, SR]
+data = [note+"+"+sub1+"+"+sub2, metaltype, Ar, H2, CH4, time, power, pressure, temp, SR]
 # print(data) # 验证数据列是否正确
 
 # 注入实验条件数据
-sht.range('N'+rowl, 'W'+rowl).value = data
-sht.range('AD'+rowl).value = date
+sht.range('O'+rowl, 'X'+rowl).value = data
+sht.range('B'+rowl).value = date
 
 # 注入Eecel公式
 sht.range('A'+rowl).formula = A
-sht.range('J'+rowl).formula = J
 sht.range('K'+rowl).formula = K
 sht.range('L'+rowl).formula = L
-sht.range('X'+rowl).formula = X
+sht.range('M'+rowl).formula = M
+sht.range('N'+rowl).formula = N
 sht.range('Y'+rowl).formula = Y
 sht.range('Z'+rowl).formula = Z
 sht.range('AA'+rowl).formula = AA
 sht.range('AB'+rowl).formula = AB
 sht.range('AC'+rowl).formula = AC
+sht.range('AD'+rowl).formula = AD
 
 # 保存文件
 wb.save()
