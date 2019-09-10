@@ -30,3 +30,5 @@ print(AC)
 # 测试
 from get_table_info import app,wb,sht,info,row,rowl
 print(rowl)
+
+input(“Enter the any press to exit” )
