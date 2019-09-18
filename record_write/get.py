@@ -22,7 +22,7 @@ global app, wb, sht, info, row, rowl
 app = xw.App(visible=False, add_book=False)
 # 链接工作表,填写要写入的EXCEL文件路径
 wb = app.books.open(
-    'F:\github_graduate\Valkyrie\idea\\test.xlsx')
+    r'F:\github_graduate\Valkyrie\idea\test.xlsx')
 # 对指定工作表进行编辑
 sht = wb.sheets['Ratio MetaData']
 # 获取当前EXCEL表格的行数与列数
