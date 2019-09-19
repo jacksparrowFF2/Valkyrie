@@ -141,7 +141,7 @@ if __name__ == '__main__':
         
     elif args.performance:
         p = All_data[11:23]
-        print(p)
+        # print(p)
         temp_performace = []
         for i in p:
             # i = "".join(i.split())
@@ -157,7 +157,7 @@ if __name__ == '__main__':
         print("this is all experiment dcleaata you get from test, you can find it in your clipborad")
         print("txt中的实验数据为：")
         print("I(A)\tV(V)\tP(W)")
-        print(filecontents)
+        # print(filecontents)
         str_filecontents = "".join(filecontents)
         print(str_filecontents)
         # 写入剪贴板
