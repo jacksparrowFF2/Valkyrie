@@ -1,6 +1,6 @@
 # Valkyrie
 
- this program is aim to increase happiness
+ 这一项目旨在提升处理数据时幸福指数以及节省时间（并没有）。
 
 ## 开始
 
@@ -165,7 +165,7 @@ scoop install notepadplusplus-np
 + extract_JV
 + extract_raman
 
-未来会随着自身实验的推进和与师兄师姐的交流不断添加、优化新的程序以处理不同测试设备导出的数据和满足文件处理的要求。
+未来会随着自身实验的推进和与师兄师姐的交流不断添加和优化新的程序以处理不同测试设备导出的数据、满足文件处理的要求。
 
 ### 运行程序
 
@@ -173,17 +173,85 @@ scoop install notepadplusplus-np
 
 > 虽然在这里介绍了如何通过命令行运行程序以得到自己期待的结果，但最终，我想大多数人都会采用另一种方式——通过 Quicker 进行调用。
 
-将
+再将仓库克隆到本地之后，如果需要依据自身的需要对程序进行个性化修改，请复制 `data_extract`文件夹至你熟悉的地方。为了能够在 PowerShell/CMD 中对程序进行调用，需要将放置程序的文件夹添加到用户和系统的环境变量中(为了保险，我建议两个都添加)，添加的方式如下：
 
-下面开始对三个程序进行简要的介绍和说明，希望你不会感到太多的疑惑。
+1. 右键 **我的电脑**
+2. 在弹出的窗口左侧找到 **高级系统设置**
+3. 在弹出的窗口 **系统属性** 中，点击右下角的 **环境变量**
+4. 在 环境变量 窗口中分为上下两个框，上方为用户变量，下方为系统变量。分别在这两个地方找到名为 **Path** 的变量，点击变量会选中，然后点击 **编辑**，会弹出一个名为 **编辑环境变量** 的窗口，点击 **新建**，将存放程序的文件夹路径复制输入，随后 **确定→确定→确定**
+5. 添加 环境变量 完成。
 
-对上述程序配置完成后，请保存并进行测试，如果测试通过，复制要进行写入的实验条件，执行 `Write.py`，大约 5 秒后，写入完成。
+在存放程序的文件夹内按住 **shift** 键右击空白处，选择 **在此处打开 PowerShell/CMD 窗口**，在 PowerShell/CMD 中输入如下命令以查看如何使用：
+
+```python
+python extract_raman.py -h
+或者
+python extract_JV.py -h
+```
+
+以执行`python extract_raman.py -h`为例，你将会在 PowerShell/CMD 中看到以下输出信息：
+
+```
+usage: extract_raman.py [-h] [-i] [-e] [-c] [-a] [-s] [-r] [-ec]
+
+This script is aims to extract Raman date from txt file
+
+optional arguments:
+  -h, --help        show this help message and exit
+  -i , --input      the file need to extract data
+  -e , --excel      the file need to open
+
+  Basic options
+
+  -c , --column     chose the column you want to extract
+
+exclusive options:
+  -a, --all         this will extract all data to your clipboard
+  -s, --select      this will only extract the select column to your clipboard
+  -r, --write       this will add your raman data to your excel file last
+                    column
+  -ec, --condition  this will add the experiment condition store in your
+                    cilpboard to your excel last row
+```
+
+那么问题来了，该如何正确的调用程序呢？对于拉曼数据，目前考虑到的需求如下所示，附属执行命令：
+
+1. 输出全部数据列到剪贴板中以便于复制到 Origin 中进行作图。
+
+   ```python
+   extract_raman.py -i 'raman文件路径' -a
+   ```
+
+2. 输出指定数据列到剪贴板中以便于复制到 Origin 中进行作图。
+
+   ```python
+   此为输出第 1 列
+   extract_raman.py -i 'raman数据文件路径' -s -c 1
+   此为输出第 2 列
+   extract_raman.py -i 'raman数据文件路径t' -s -c 2
+   ```
+
+3. 将拉曼数据写入Excel文件中的拉曼数据表——Raman Metadata
+
+   ```python
+   exract_raman.py -i 'raman数据文件路径' -e 'Excel文件路径' -r
+   ```
+
+4. 将实验条件写入到 Excel  文件中拉曼的综合表征表——Raman Ratio
+
+   ```python
+   -e 'F:\github_graduate\Valkyrie\idea\test1.xlsx' -ec 
+   ```
+
+请注意`-a`、`-s`、`-r`和`-ec`这四个参数不可同时使用，每次只能使用一个，如果同时使用将会按照最高优先级的那一个进行输出。
+
+如果要修改程序，对程序配置完成后，请保存并进行测试，确保正常运行。
 
 ## 解决方案
 
 我对于这个项目希望它未来能做到全平台化(Win、Mac、Linux、IOS、Android)，能够集实验数据汇总、读取、云同步、案例对比和周汇报报告生成为一体。
 
-目前因为个人能力有限，暂时只做到了实验数据的写入，以后会尝试写一个 UI 界面吧，不知道在研究生期间能不能完成，也许这个饼永远都不会完成。
+目前因为个人能力有限，暂时只做到了实验数据的提取和写入，UI 界面会在以后部署（但不知道会在何时出现），不知道在研究生期间能不能完成，也许这个饼永远都不会完成。所以暂时就先采用 Quicker 进行调用。
 
 我目前的解决方案：
 
@@ -193,4 +261,12 @@ scoop install notepadplusplus-np
 
 ## 最后
 
-希望这个小小的程序能够解决你的一部分痛点。
+如果这个小小的程序能够解决你的一部分痛点，欢迎提供反馈和赞助。
+
+***
+
+## PDF文献小组知识共享方案
+
+1. 将所有文献拖进 Mendeley，进行整理。
+2. 创建 Github 仓库或者云盘的同步文件夹
+3. 在 Mendeley 中将

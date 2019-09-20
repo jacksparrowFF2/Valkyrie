@@ -31,7 +31,7 @@ group = parser.add_argument_group(description = 'Basic options')
 group.add_argument('-c','--column', metavar = '', type = int, help = 'chose the column you want to extract')
 # 创建互斥锁
 # group = parser.add_mutually_exclusive_group()
-group = parser.add_argument_group('advanced options')
+group = parser.add_argument_group('exclusive options')
 group.add_argument('-a','--all', action = 'store_true', 
                    help = 'this will extract all data to your clipboard')
 group.add_argument('-s','--select', action = 'store_true', 
@@ -145,26 +145,28 @@ if __name__ == '__main__':
             sht.range('A2').expand('down').api.VerticalAlignment = -4108
             sht.range('A2').expand('down').api.font.Bold = True
                 # 对数据列 A 进行自动换行
-            sht.range('A2').api.WrapText = True
+            sht.range('A2').expand('down').api.WrapText = True
                 # 对数据列 B 进行格式化为垂直居中对齐，水平靠右，加粗
             sht.range('B2').expand('down').api.HorizontalAlignment = -4152
             sht.range('B2').expand('down').api.VerticalAlignment = -4108
             sht.range('B2').expand('down').api.font.Bold = True
                 # 对数据列 C:AE 进行格式化为水平垂直居中对齐
-            sht.range('C2:AE2').expand('down').api.HorizontalAlignment = -4108
-            sht.range('C2:AE2').expand('down').api.VerticalAlignment = -4108
+            sht.range('C2:AE'+str(rowl)).api.HorizontalAlignment = -4108
+            sht.range('C2:AE'+str(rowl)).api.VerticalAlignment = -4108
                 # 对数据列 B 进行格式化为垂直居中对齐，水平靠右，加粗
             sht.range('AF2').expand('down').api.HorizontalAlignment = -4152
             sht.range('AF2').expand('down').api.VerticalAlignment = -4108
                 # 将数据列 AC:AE 数据显示格式化为百分比
             sht.range('AC2:AE2').expand('down').api.style = "Percent"
-                # 将数据列 AC:AE 数据显示格式化为保留两位小数点
-            sht.range('C2:M2').expand('down').api.NumberFormat = "##.00_)"
+                # 将数据列 C:M,Y:AA 数据显示格式化为保留两位小数点
+            sht.range('C2:J'+str(rowl)).api.NumberFormat = "##.00_)"
             sht.range('Y2:AA2').expand('down').api.NumberFormat = "##.00_)"
                 # 将数据列 Q 数据显示格式化为 3 位
             sht.range('Q2').expand('down').api.NumberFormat = "000"
-                # 将数据列 Q 数据显示格式化为 2 位
-            sht.range('R2:T2').expand('down').api.NumberFormat = "00"
+                # 将数据列 R:S 数据显示格式化为 2 位
+            sht.range('R2:S2').expand('down').api.NumberFormat = "00"
+                # 将数据列 T 数据显示格式化为 3 位
+            sht.range('T2').expand('down').api.NumberFormat = "000"
             # 格式化完成提示
             print('EXCEL 列表格式化完成')
         finally:
@@ -287,7 +289,7 @@ if __name__ == '__main__':
             # print(format_select_list[i][n])
             out_select_list.append(format_select_list[i][n])
             # out_select_list[i] = format_select_list[i][n]
-        print(out_select_list)
+        # print(out_select_list)
         # 构建输出字符串
         str_data = "\n".join(out_select_list)
         # 调试输出
@@ -304,6 +306,7 @@ if __name__ == '__main__':
         
 
     # print(filecontents)
+    
     # print(type(filecontents))
     # writeclip(filecontents)
     
