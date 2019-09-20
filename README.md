@@ -247,6 +247,12 @@ exclusive options:
 
 如果要修改程序，对程序配置完成后，请保存并进行测试，确保正常运行。
 
+#### 通过Quicker
+
+正在施工中···
+
+如果需要，请持续关注本页面。
+
 ## 解决方案
 
 我对于这个项目希望它未来能做到全平台化(Win、Mac、Linux、IOS、Android)，能够集实验数据汇总、读取、云同步、案例对比和周汇报报告生成为一体。
@@ -261,7 +267,7 @@ exclusive options:
 
 ## 最后
 
-如果这个小小的程序能够解决你的一部分痛点，欢迎提供反馈和赞助。
+如果这个小小的程序能够解决你的一部分痛点，欢迎在Github上提供反馈和赞助。
 
 ***
 
@@ -269,4 +275,11 @@ exclusive options:
 
 1. 将所有文献拖进 Mendeley，进行整理。
 2. 创建 Github 仓库或者云盘的同步文件夹
-3. 在 Mendeley 中将
+3. 打开Mendeley→Watched Folder→选择你存储文献的地方。
+4. 打开Mendeley→ Tools→File Organizer→Browse→选择存储位置为本地
+5. 复制整理好的文件夹至Github仓库或者云盘同步文件夹→上传
+6. 打开Mendeley→右键你要读的文献→Open file Externally→打开文献→在需要的地方添加注释→保存并关闭
+7. https://getquicker.net/sharedaction?code=c042c5b4-4e97-4e6f-96eb-08d737264562
+8. 在浏览器打开上述网址，安装快捷动作
+9. 单击以选中修改完的PDF文件，调出 Quicker 快捷面板，使用 **PDF注释提取快捷动作** 提取注释构建PDF注释全文检索数据库。
+10. 复制整理好的文件夹至Github仓库或者云盘同步文件夹→上传
