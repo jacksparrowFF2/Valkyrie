@@ -20,14 +20,15 @@ import argparse
 parser = argparse.ArgumentParser(
     description='This script is aims to extract J-V data from txt file')
 # 创建命令行输入参数，输入参数为文件路径
-parser.add_argument("-i", "--input", type=argparse.FileType(mode='r'), required=True,
+parser.add_argument('-i', '--input', metavar = '', type=argparse.FileType(mode='r'), required=True,
                     help='the file need to extract data')
 # 创建附属命令行参数，增加可选输出第二列的选项
-group = parser.add_argument_group('Basic options')
-group.add_argument("-c", "--column",type=int,
+group = parser.add_argument_group(description = 'Basic options')
+group.add_argument('-c', "--column", metavar = '', type=int,
                     help='chose the column you want to process')
 # 创建互斥锁
-group = parser.add_mutually_exclusive_group()
+group = parser.add_argument_group('advanced options')
+# group = parser.add_mutually_exclusive_group(description = 'Basic options')
 group.add_argument('-s', '--select', action='store_true',
                    help='this will only extract the select column to your clipboard')
 group.add_argument('-d', '--delete', action='store_true',

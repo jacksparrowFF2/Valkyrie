@@ -23,12 +23,12 @@ parser = argparse.ArgumentParser(description='This script is aims to extract Ram
 # 创建命令行输入参数，输入参数为文件路径
 # parser.add_argument("-i","--input", type=argparse.FileType(mode = 'r'), required = True, 
 #                     help = 'the file need to extract data')
-parser.add_argument("-i","--input", type=argparse.FileType(mode = 'r'),
+parser.add_argument("-i","--input", metavar = '', type=argparse.FileType(mode = 'r'),
                     help = 'the file need to extract data')
-parser.add_argument("-e","--excel", type = str, help = 'the file need to open')
+parser.add_argument("-e","--excel", metavar = '', type = str, help = 'the file need to open')
 # 创建附属命令行参数，增加可选输出第二列的选项
-group = parser.add_argument_group('Basic options')
-group.add_argument('-c','--column', type = int, help = 'chose the column you want to extract')
+group = parser.add_argument_group(description = 'Basic options')
+group.add_argument('-c','--column', metavar = '', type = int, help = 'chose the column you want to extract')
 # 创建互斥锁
 # group = parser.add_mutually_exclusive_group()
 group = parser.add_argument_group('advanced options')
@@ -175,8 +175,6 @@ if __name__ == '__main__':
                 wb.close()
                 # 结束进程
                 app.kill
-        
-        
     elif args.write:
         infile = args.input
         filecontents = infile.read()
@@ -302,7 +300,8 @@ if __name__ == '__main__':
         # print(filecontents)
         # writeclip(filecontents)
         print('请输入 -h 以查看使用说明')
-
+        input("Press <enter>")
+        
 
     # print(filecontents)
     # print(type(filecontents))
