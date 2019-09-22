@@ -170,7 +170,7 @@ if __name__ == '__main__':
                 # 将数据列 T 数据显示格式化为 3 位
             sht.range('T2').expand('down').api.NumberFormat = "000"
             # 格式化完成提示
-            print('EXCEL 格式化完成')
+            print('EXCEL 列表格式化完成')
         finally:
             if wb:
                 # 保存文件
