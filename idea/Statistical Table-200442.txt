@@ -1,0 +1,11 @@
+IV Test Report
+
+Date and Time:2019/09/09-20:04:42
+
+Material:	CIGS
+Serial NO.:	H082901
+Operator:	WRB
+Sample Area(cm2)	0.16
+
+NO.	Time/s	Serial NO.	Voc/V	Isc/mA	Pmax/mW	Vpmax/V	Ipmax/mA	Rs/ohm	Rsh/ohm	Jsc/mA.cm-2	FF	η/%
+1	200442	H082901	 -0.001005	  2.093950	 -0.002104	 -0.001005	  2.093950	       NaN	       NaN	 13.087188	100.000000	 -0.013153
