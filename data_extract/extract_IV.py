@@ -13,8 +13,9 @@
 # here put the import lib
 # 引入命令行组件
 import argparse
-import xlwings
-import sys
+# 引入Excel操作组件
+import xlwings as xw
+# 引入剪贴板组件
 import win32clipboard as w
 import win32con
 
@@ -66,16 +67,52 @@ if __name__ == '__main__':
         print(All_data[10])
         writeclip(All_data[10])
     elif args.write:
+        infile = args.input
+        All_data = infile.readlines()
         # name = str2list(All_data[9])
         # print(name)
         data = str2list(All_data[10])
         print(data)
+        try:
+            inexcel = args.excel
+            app = xw.App(visible=False,add_book = False)
+            wb = app.books.open(inexcel)
+            sht = wb.sheets['I-V']
+            info = sht.range('A1').expand('table')
+            row = info.last_cell.row
+            col = info.last_cell.column
+            rowl = row + 1
+            print('原表格最后一行：'+str(row))
+            print('数据添加所在行：'+str(rowl))
+            # 注入数据
+            sht.range('A'+str(rowl)).value = 'TAG'
+            sht.range('B'+str(rowl),'N'+str(rowl)).value = data
+            print('注入完成')
+            # 格式化
+                # A列进行自动换行+粗体+右对齐+垂直居中
+            sht.range('A'+str(rowl)).api.WrapText = True
+            sht.range('A2').expand('down').api.font.Bold = True
+            sht.range('A2').expand('down').api.HorizontalAlignment = -4152
+            sht.range('A2').expand('down').api.VerticalAlignment = -4108
+                # B:N 列进行垂直水平居中对齐
+            sht.range('B'+str(rowl),'N'+str(rowl)).api.HorizontalAlignment = -4108
+            sht.range('B'+str(rowl),'N'+str(rowl)).api.VerticalAlignment = -4108
+                # 行高
+            sht.api.Rows(rowl).RowHeight = 20
+            print('格式化完成')
+            
+        finally:
+            if wb:
+                wb.save()
+                wb.close()
+                app.kill()
     else:
         print('请输入 -h 以查看帮助')
     
     # # print(All_data)
     # time = All_data[2]
     
+
     # name = str2list(All_data[9])
     # print(name)
     
