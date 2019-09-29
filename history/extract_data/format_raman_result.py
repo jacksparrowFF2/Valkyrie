@@ -56,7 +56,8 @@ if __name__ == '__main__':
             out_list.append(i[2]+'\t')
             out_list.append(i[3]+'\t')
         print(out_list)
-        del out_list[-3:-1]
+        del out_list[8:10]
+        # del out_list[-1]
         out_str = "".join(out_list)
         print(out_str)
         writeclip(out_str)
