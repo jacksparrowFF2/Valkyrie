@@ -53,8 +53,9 @@ if __name__ == '__main__':
             # 行高
         sht.api.Rows(1).RowHeight = 20
             # 列宽
-        sht.api.Columns("A:N").Columnwidth = 15
-        print('表 1 创建完成')
+        sht.api.Columns("A:L").Columnwidth = 15
+        sht.api.Columns("M:N").Columnwidth = 28
+        print('表 1：I-V Performance 创建完成')
         # 创建表 2
         wb.sheets.add("sheet2")
         wb.sheets["sheet2"].name = "refine data"
@@ -77,22 +78,12 @@ if __name__ == '__main__':
             # 行高
         sht2.api.Rows(1).RowHeight = 20
             # 列宽
-        sht2.api.Columns("A:G").Columnwidth = 15
-        print('表 2 创建完成')
+        sht2.api.Columns("A:G").Columnwidth = 20
+        print('表 2：refine data 创建完成')
         # 创建表 3
         wb.sheets.add("raw data")
         # wb.sheets["sheet2"].name = "refine data"
         sht3 = wb.sheets['raw data']
-        name = [
-                "file name",  
-                "Cell Area(cm2)", 
-                "Voc(V)", 
-                "Jsc(mA/cm2)", 
-                "Fill Factor(%)", 
-                "Rs(ohm)", 
-                "Rsh(ohm)", 
-                ]
-        sht3.range('A1','G1').value = name
         # 格式化
         # 对表格进行美化
             # 对第一行标题进行格式化
@@ -101,8 +92,8 @@ if __name__ == '__main__':
             # 行高
         sht3.api.Rows(1).RowHeight = 20
             # 列宽
-        sht3.api.Columns("A:G").Columnwidth = 15
-        print('表 3 创建完成')
+        sht3.api.Columns("A:G").Columnwidth = 20
+        print('表 3：raw data 创建完成')
     finally:
         if wb:
             wb.save(args.input)
