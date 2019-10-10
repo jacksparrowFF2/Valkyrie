@@ -148,13 +148,14 @@ if __name__ == '__main__':
         print(out_performance)
         refine_data = []
         refine_data = [filename,
-                       area,out_performance[0],
+                       out_performance[5],
+                       out_performance[0],
                        out_performance[7],
                        out_performance[6],
-                       out_performance[-2],
-                       out_performance[-1]
+                       out_performance[-4],
+                       out_performance[-3]
                        ]
-        print(refine_data)
+        print(refine_data) 
         filecontents = All_data[30:]
         # 构建格式化列表
         I = selectcolumn_str(filecontents,0)
@@ -244,6 +245,10 @@ if __name__ == '__main__':
                     # 水平居中对齐
                 sht3.range('A1').expand('table').api.HorizontalAlignment = -4108
                 sht3.range('A1').expand('table').api.VerticalAlignment = -4108
+                    # 设定单元格宽度
+                sht3.api.columns(col3).ColumnWidth = 20
+                sht3.api.columns(coll3).ColumnWidth = 20
+                sht3.api.columns(coll3+1).ColumnWidth = 20
             else:
                 sht3.range((1,coll3),(row3,coll3)).options(transpose = True).value = I
                 sht3.range((1,coll3+1),(row3,coll3+1)).options(transpose = True).value = V
@@ -252,6 +257,10 @@ if __name__ == '__main__':
                     # 对新增数据单元格进行格式化
                 sht3.range((1,coll3),(row3,coll3+2)).api.HorizontalAlignment= -4108
                 sht3.range((1,coll3),(row3,coll3+2)).api.VerticalAlignment= -4108
+                    # 设定单元格宽度
+                sht3.api.columns(coll3).ColumnWidth = 20
+                sht3.api.columns(coll3+1).ColumnWidth = 20
+                sht3.api.columns(coll3+2).ColumnWidth = 20
             # 格式化完成提示
             print('表格 3 格式化完成')
             

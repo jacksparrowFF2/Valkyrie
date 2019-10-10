@@ -17,13 +17,14 @@ import argparse
 
 parser = argparse.ArgumentParser(description = 'create excel in your select path')
 
-parser.add_argument('-i','--input', metavar='', type=str, required = True, help = 'where your want to creat excel')
+parser.add_argument('-i','--input', metavar='', type=str, required = True, 
+                    help = 'where your want to creat excel')
 
 args = parser.parse_args()
 
 if __name__ == '__main__':
     try:
-        app = xw.App(visible=True,add_book=False)
+        app = xw.App(visible=False,add_book=False)
         # wb = app.books.add()
         wb = app.books.add()
         wb.sheets["sheet1"].name = "I-V Performance"
@@ -62,7 +63,7 @@ if __name__ == '__main__':
         sht2 = wb.sheets['refine data']
         name = [
                 "file name",  
-                "Cell Area(cm2)", 
+                "PCE", 
                 "Voc(V)", 
                 "Jsc(mA/cm2)", 
                 "Fill Factor(%)", 
