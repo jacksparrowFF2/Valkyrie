@@ -16,20 +16,24 @@ import argparse
 import os
 import time
 
-# parser  = argparse.ArgumentParser(description = '创建 2 阶汇总表格')
+parser  = argparse.ArgumentParser(description = '创建 2 阶汇总表格')
 
-# parser.add_argument('-i','--input',metavar='',type=str,required=True,
-#                     help='在指定位置创建EXCEL文件')
-# args = parser.parse_args()
+parser.add_argument('-i','--input',metavar='',type=str,required=True,
+                    help='在指定位置创建EXCEL文件')
+args = parser.parse_args()
 
 # 获取当前路径并规定excel文件路径
-abspath = os.path.abspath('.')
-print(abspath)
-timetick = time.strftime("%Y_%m_%d-%H_%M_%S", time.localtime())
-filepath = abspath+'\\'+'test'+'.xlsx'
+# abspath = os.path.abspath('.')
+# print(abspath)
+# timetick = time.strftime("%Y_%m_%d-%H_%M_%S", time.localtime())
+# filepath = abspath+'\\'+'test'+'.xlsx'
+# print(filepath)
+
+filepath = args.input
 print(filepath)
+
 try:
-    app = xw.App(visible=True,add_book=False)
+    app = xw.App(visible=False,add_book=False)
     wb = app.books.add()
     wb.sheets["sheet1"].name = "Rsh"
     wb.sheets.add("Rs")
@@ -37,15 +41,9 @@ try:
     wb.sheets.add("Jsc")
     wb.sheets.add("Voc")
     wb.sheets.add("PCE")
-    sh1 = wb.sheets['PCE']
-    sh2 = wb.sheets['Voc']
-    sh3 = wb.sheets['Jsc']
-    sh4 = wb.sheets['FF']
-    sh5 = wb.sheets['Rs']
-    sh6 = wb.sheets['Rsh']
     print('表格创建完成')
 finally:
     if wb:
         wb.save(filepath)
-        # wb.close()
-        # wb.kill()
+        wb.close()
+        wb.kill()
