@@ -2,6 +2,8 @@
 
  这一项目旨在提升处理数据时幸福指数以及节省时间（并没有）。
 
+**目前只针对于 txt 、excel 文件进行处理，未来会逐步增加对图像和Origin文件的处理。**
+
 # 开始
 
 ### 项目地址
@@ -111,7 +113,7 @@ scoop install notepadplusplus-np
 如果你不能顺利的安装 Scoop 以及访问国外网站，请移步至相应软件的官网进行下载。
 
 + [VSCode](https://aka.ms/win32-x64-user-stable)
-+ [Sublime](https://download.sublimetext.com/Sublime Text Build 3211 x64 Setup.exe)
++ [Sublime]( https://www.sublimetext.com/3 )
 + [NotePad++](https://notepad-plus-plus.org/downloads/)
 
 ## 安装 Python3（必选）
