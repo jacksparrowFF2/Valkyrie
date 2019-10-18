@@ -102,7 +102,7 @@ if __name__ == '__main__':
         metaltype = excode["金属网"]
         note = excode["实验目的"]
         time = int(excode["持续时间(min)"])
-        SR = int(excode["方阻(kΩ/□)"])
+        SR = str(excode["方阻(kΩ/□)"])
         try:
             # 开始对 excel 文件进行操作
             inexcel = args.excel
@@ -137,9 +137,10 @@ if __name__ == '__main__':
             sht.range('AC'+str(rowl)).formula = '=Y%s/SUM(Y%s+Z%s+AA%s)'%(rowl,rowl,rowl,rowl)
             sht.range('AD'+str(rowl)).formula = '=Z%s/SUM(Y%s+Z%s+AA%s)'%(rowl,rowl,rowl,rowl)
             sht.range('AE'+str(rowl)).formula = '=AA%s/SUM(Y%s+Z%s+AA%s)'%(rowl,rowl,rowl,rowl)
-            sht.range('AF'+str(rowl)).formula = '=P%s&"/"&Q%s&"/"&R%s&"/"&S%s&"/"&T%s&"/"&U%s&"/"&V%s&"/"&W%s'%(rowl,rowl,rowl,rowl,rowl,rowl,rowl,rowl)
+            sht.range('AF'+str(rowl)).formula = '=AA%s/Z%s'%(rowl,rowl)
+            sht.range('AG'+str(rowl)).formula = '=P%s&"/"&Q%s&"/"&R%s&"/"&S%s&"/"&T%s&"/"&U%s&"/"&V%s&"/"&W%s'%(rowl,rowl,rowl,rowl,rowl,rowl,rowl,rowl)
                 # 注入实验条件数据
-            sht.range('O'+str(rowl), 'X'+str(rowl)).value = excondition
+            sht.range('O'+str(rowl),'X'+str(rowl)).value = excondition
             sht.range('B'+str(rowl)).value = date
             # 对表格进行美化
             #     # 对第一行标题进行格式化
@@ -167,6 +168,8 @@ if __name__ == '__main__':
             sht.range('C2:J'+str(rowl)).api.NumberFormat = "##.00_)"
             sht.range('K2:N'+str(rowl)).api.NumberFormat = "##.00_)"
             sht.range('Y2:AA2').expand('down').api.NumberFormat = "##.00_)"
+                # 将数据列 AF 数据显示格式化为保留一位小数点
+            sht.range('AF2').expand('down').api.NumberFormat = "##.0_)"
                 # 将数据列 Q 数据显示格式化为 3 位
             sht.range('Q2').expand('down').api.NumberFormat = "000"
                 # 将数据列 R:S 数据显示格式化为 2 位
