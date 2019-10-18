@@ -125,7 +125,7 @@ if __name__ == '__main__':
             # 创建实验条件数据列
             excondition = [note+"+"+sub1+"+"+sub2, metaltype, Ar, H2, CH4, time, power, pressure, temp, SR]
             # 注入EXCEL公式
-            sht.range('A'+str(rowl)).formula = '=B%s&CHAR(10)&AF%s'%(rowl,rowl)
+            sht.range('A'+str(rowl)).formula = '=B%s&CHAR(10)&AG%s'%(rowl,rowl)
             sht.range('K'+str(rowl)).formula = '=C%s/E%s'%(rowl,rowl)
             sht.range('L'+str(rowl)).formula = '=I%s/E%s'%(rowl,rowl)
             sht.range('M'+str(rowl)).formula = '=C%s/G%s'%(rowl,rowl)
@@ -165,9 +165,9 @@ if __name__ == '__main__':
                 # 将数据列 AC:AE 数据显示格式化为百分比
             sht.range('AC2:AE2').expand('down').api.style = "Percent"
                 # 将数据列 C:M,Y:AA 数据显示格式化为保留两位小数点
-            sht.range('C2:J'+str(rowl)).api.NumberFormat = "##.00_)"
-            sht.range('K2:N'+str(rowl)).api.NumberFormat = "##.00_)"
-            sht.range('Y2:AA2').expand('down').api.NumberFormat = "##.00_)"
+            sht.range('C2:J'+str(rowl)).api.NumberFormat = "0.00_);(0.00)"
+            sht.range('K2:N'+str(rowl)).api.NumberFormat = "0.00_);(0.00)"
+            sht.range('Y2:AA2').expand('down').api.NumberFormat = "0.00_);(0.00)"
                 # 将数据列 AF 数据显示格式化为保留一位小数点
             sht.range('AF2').expand('down').api.NumberFormat = "##.0_)"
                 # 将数据列 Q 数据显示格式化为 3 位
