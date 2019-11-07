@@ -74,6 +74,10 @@ def output_all(alist):
 def output_select(alist):
     temp1 = []
     n = args.column - 1
+    if n == 1:
+        n = 0
+    else:
+        n = 1
     for i in alist:
         i.pop(n)
         astr = "".join(i)
