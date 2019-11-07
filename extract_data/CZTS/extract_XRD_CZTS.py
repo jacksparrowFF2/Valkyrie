@@ -36,19 +36,77 @@ group.add_argument('-wx','--wxrd', action = 'store_true',
                    help = '模式：将 XRD 结果写入指定的 excel 表格')
 group.add_argument('-cs','--copyselect', action = 'store_true', 
                    help = '模式：将提取的 XRD 数据列写入剪贴板')
+group.add_argument('-ca','--copyall', action = 'store_true', 
+                   help = '模式：将所有的 XRD 数据列写入剪贴板')
 
 args = parser.parse_args()
 
+# 剪贴板写入函数
+def writeclip(astring):
+    w.OpenClipboard()
+    w.EmptyClipboard()
+    w.SetClipboardData(win32con.CF_UNICODETEXT, astring)
+    w.CloseClipboard()
+
+# 用于去除 XRD 数据中的逗号分隔符
+def remove_comma(alist):
+    temp1 = []
+    n = 1
+    for i in alist:
+        i = i.split(",")
+        temp2 = []
+        for element in i:
+            element = element.replace(" ", "")
+            temp2.append(element)
+        temp1.append(temp2)
+    return(temp1)
+
+# 输出所有结果
+def output_all(alist):
+    temp1 = []
+    for i in alist:
+        i = " ".join(i)
+        temp1.append(i)
+    astring = "".join(temp1)
+    return(astring)
+
+# 输出指定列
+def output_select(alist):
+    temp1 = []
+    n = args.column - 1
+    for i in alist:
+        i.pop(n)
+        astr = "".join(i)
+        temp1.append(astr)
+    astr = "".join(temp1)
+    return(astr)
+
 if __name__ == '__main__':
     if args.wcondition:
-        infile = args.input
-        All_data = infile.readlines()
-        in_xrddate = All_data[140:]
-        print(in_xrddate)
+        print('1')
     elif args.wxrd:
         print('2')
     elif args.copyselect:
-        print('3')
+        print('Copyselect')
+        infile = args.input
+        All_data = infile.readlines()
+        in_xrddata = All_data[141:]
+        print("你选择输出的数据列为：%s" %(args.column))
+        # print(in_xrddata)
+        temp = remove_comma(in_xrddata)
+        output_xrddata = output_select(temp)
+        print(output_xrddata)
+        writeclip(output_xrddata)  
+    elif args.copyall:
+        print('Copyall')
+        infile = args.input
+        All_data = infile.readlines()
+        in_xrddata = All_data[141:]
+        # remove_comma(in_xrddata)
+        temp = remove_comma(in_xrddata)
+        output_xrddata = output_all(temp)
+        writeclip(output_xrddata)
+        print(output_xrddata) 
     else:
         print('请输入 -h 以查看使用说明')
         input("Press <enter>")
