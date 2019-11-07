@@ -31,7 +31,7 @@ group.add_argument('-c','--column', metavar = '', type = int,
 
 group = parser.add_argument_group('进阶选项')
 group.add_argument('-wc','--wcondition', action = 'store_true', 
-                   help = '模式：将 XRD 结果写入指定的 excel 表格')
+                   help = '模式：将 XRD 样品条件写入指定的 excel 表格')
 group.add_argument('-wx','--wxrd', action = 'store_true', 
                    help = '模式：将 XRD 结果写入指定的 excel 表格')
 group.add_argument('-cs','--copyselect', action = 'store_true', 
