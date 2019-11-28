@@ -14,7 +14,7 @@
 from operator import itemgetter
 import win32clipboard as w
 import win32con
-import xlwings as xlwings
+import xlwings as xw
 import argparse
 
 # 创建命令解释器
