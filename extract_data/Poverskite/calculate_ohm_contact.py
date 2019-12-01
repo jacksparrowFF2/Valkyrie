@@ -21,6 +21,8 @@ import argparse
 import csv
 import pandas as pd
 import numpy as np
+from pandas import Series,DataFrame
+from numpy import nan as NaN
 
 def getposition(inputlist):
     for i in range(len(inputlist)):
@@ -62,6 +64,8 @@ group.add_argument('-creat', '--creat_excel', action = 'store_true',
 group.add_argument('-save', '--savedata', action = 'store_true', 
                    help = '模式：计算该电池的平均电阻并写入指定 excel 表格')
 group.add_argument('-average', '--average', action = 'store_true', 
+                   help = '模式：计算该系列的最终平均电阻并写入指定 excel 表格')
+group.add_argument('-p', '--performance', action = 'store_true', 
                    help = '模式：计算该系列的最终平均电阻并写入指定 excel 表格')
 
 args = parser.parse_args()
@@ -140,6 +144,62 @@ if __name__ == '__main__':
               wb.save()
               wb.close()
               app.kill()
+    elif args.performance:
+        csvFile = args.input
+        data = DataFrame([[12,'man','13865626962'],[19,'woman',NaN],[17,NaN,NaN],[NaN,NaN,NaN]],columns=['age','sex','phone'])
+        print(type(data))
+        a = data.dropna(axis=0,how="any")
+        print(a)
+        # 输出电流数据列
+        I = pd.read_csv(csvFile,skiprows=[0,1,2,3,4,5,6,7,8,9] ,engine='python',usecols = [6,7,8,9,10,11,12,13])
+        # 将输出的电流数据列转化为 list 
+        # I = I['I(mA)'].tolist()
+        # 输出电流
+        # print(I)
+        print(type(I))
+        # I.dropna(axis=0, how='all')
+        # I.fillna(0)
+        # print(I)
+        # performance = np.array(I).tolist()
+        # a = performance[0]
+        # print(a)
+        # for item in performance:
+        #     if item[0] == a:
+        #         pass
+        #     else:
+        #         print(item)
+         
+        
+        # print()
+        # print(performance[-1])
+        # a = []
+        # for item in performance[-1]:
+        #     item = float(item)
+        #     a.append(item)
+            
+        # print(a)
+        # # 写入ohm
+        # try:
+        #     inexcel = args.excel
+        #     app = xw.App(visible = False, add_book = False)
+        #     wb = app.books.open(inexcel)
+        #     sht = wb.sheets['Average ohm']
+        #     info = sht.range('A1').expand('table')
+        #     row = info.last_cell.row
+        #     column = info.last_cell.column
+        #     rowl = row + 1
+        #     sht.range('A'+str(rowl),'D'+str(rowl)).value = abs_ohm
+        #     # 格式化表格
+        #     # 对第一行标题进行格式化
+        #     sht.range('A'+str(rowl)).expand('right').api.HorizontalAlignment = -4108
+        #     sht.range('A'+str(rowl)).expand('right').api.VerticalAlignment = -4108
+        #     # 行高
+        #     sht.api.Rows(rowl).RowHeight = 20
+        # finally:
+        #     if wb:
+        #       wb.save()
+        #       wb.close()
+        #       app.kill()
     elif args.average:
         # 写入ohm
         try:
