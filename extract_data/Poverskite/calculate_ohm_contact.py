@@ -19,10 +19,13 @@ import xlwings as xw
 import argparse
 # 导入 CSV 组件
 import csv
+# 导入 pandas
 import pandas as pd
 import numpy as np
 from pandas import Series,DataFrame
 from numpy import nan as NaN
+# 导入系统组件
+import os
 
 def getposition(inputlist):
     for i in range(len(inputlist)):
@@ -60,7 +63,9 @@ parser.add_argument('-e','--excel',metavar = '', type = str,
 
 group = parser.add_argument_group('进阶选项')
 group.add_argument('-creat', '--creat_excel', action = 'store_true', 
-                   help = '模式：将实验条件写入指定 excel 表格')
+                   help = '模式：创建用于保存欧姆电阻 excel 表格')
+group.add_argument('-creat2', '--creat_excel2', action = 'store_true', 
+                   help = '模式：创建用于保存正反测试电池性能 excel 表格')
 group.add_argument('-save', '--savedata', action = 'store_true', 
                    help = '模式：计算该电池的平均电阻并写入指定 excel 表格')
 group.add_argument('-average', '--average', action = 'store_true', 
@@ -87,6 +92,28 @@ if __name__ == '__main__':
             sht.api.Rows(1).RowHeight = 20
             # 列宽
             sht.api.Columns("A:D").Columnwidth = 15
+        finally:
+            if wb:
+              wb.save(args.excel)
+              wb.close()
+              app.kill()
+    elif args.creat_excel2:
+        try:
+            app = xw.App(visible = True, add_book = False)
+            wb = app.books.add()
+            wb.sheets["sheet1"].name = "Performance"
+            sht = wb.sheets["Performance"]
+            name = ["Direction","Isc(mA)","Jsc(mA/cm^2)","Voc(V)","Pmax(mW)","Vpmax(V)","Ipmax(mA)","FF(%)","Etac(%)"]
+            sht.range('A1','H1').value = name
+            # 格式化表格
+            # 对第一行标题进行格式化
+            sht.range('A1').expand('right').api.HorizontalAlignment = -4108
+            sht.range('A1').expand('right').api.VerticalAlignment = -4108
+            # 行高
+            sht.api.Rows(1).RowHeight = 20
+            # 列宽
+            sht.api.Columns("A").Columnwidth = 20
+            sht.api.Columns("B:I").Columnwidth = 15
         finally:
             if wb:
               wb.save(args.excel)
@@ -146,60 +173,53 @@ if __name__ == '__main__':
               app.kill()
     elif args.performance:
         csvFile = args.input
-        data = DataFrame([[12,'man','13865626962'],[19,'woman',NaN],[17,NaN,NaN],[NaN,NaN,NaN]],columns=['age','sex','phone'])
-        print(type(data))
-        a = data.dropna(axis=0,how="any")
-        print(a)
         # 输出电流数据列
         I = pd.read_csv(csvFile,skiprows=[0,1,2,3,4,5,6,7,8,9] ,engine='python',usecols = [6,7,8,9,10,11,12,13])
+        I = I.dropna(axis = 0,how = "any")
+        # print(I)
         # 将输出的电流数据列转化为 list 
-        # I = I['I(mA)'].tolist()
+        I = np.array(I).tolist()
         # 输出电流
         # print(I)
-        print(type(I))
-        # I.dropna(axis=0, how='all')
-        # I.fillna(0)
-        # print(I)
-        # performance = np.array(I).tolist()
-        # a = performance[0]
-        # print(a)
-        # for item in performance:
-        #     if item[0] == a:
-        #         pass
-        #     else:
-        #         print(item)
-         
+        # print(type(I))
+        P_forward = list(map(float,I[0]))
+        P_reverse = list(map(float,I[-1]))
+        # 获取文件名
+        infile = args.input
+        filename = os.path.split(str(infile))[1]
+        print(filename)
+        # 将文件名注入到填充序列
+        P_forward.insert(0,filename+'_P_forward')
+        P_reverse.insert(0,filename+'_P_reverse')
         
-        # print()
-        # print(performance[-1])
-        # a = []
-        # for item in performance[-1]:
-        #     item = float(item)
-        #     a.append(item)
-            
-        # print(a)
-        # # 写入ohm
-        # try:
-        #     inexcel = args.excel
-        #     app = xw.App(visible = False, add_book = False)
-        #     wb = app.books.open(inexcel)
-        #     sht = wb.sheets['Average ohm']
-        #     info = sht.range('A1').expand('table')
-        #     row = info.last_cell.row
-        #     column = info.last_cell.column
-        #     rowl = row + 1
-        #     sht.range('A'+str(rowl),'D'+str(rowl)).value = abs_ohm
-        #     # 格式化表格
-        #     # 对第一行标题进行格式化
-        #     sht.range('A'+str(rowl)).expand('right').api.HorizontalAlignment = -4108
-        #     sht.range('A'+str(rowl)).expand('right').api.VerticalAlignment = -4108
-        #     # 行高
-        #     sht.api.Rows(rowl).RowHeight = 20
-        # finally:
-        #     if wb:
-        #       wb.save()
-        #       wb.close()
-        #       app.kill()
+        print(P_forward)
+        print(P_reverse)
+        try:
+            inexcel = args.excel
+            app = xw.App(visible = False, add_book = False)
+            wb = app.books.open(inexcel)
+            sht = wb.sheets['Performance']
+            info = sht.range('A1').expand('table')
+            row = info.last_cell.row
+            column = info.last_cell.column
+            rowl = row + 1
+            rowll = row + 2
+            sht.range('A'+str(rowl),'I'+str(rowl)).value = P_forward
+            sht.range('A'+str(rowll),'I'+str(rowll)).value = P_reverse
+            # 格式化表格
+            # 对添加数据进行格式化
+            sht.range('A'+str(rowl)).expand('right').api.HorizontalAlignment = -4108
+            sht.range('A'+str(rowl)).expand('right').api.VerticalAlignment = -4108
+            sht.range('A'+str(rowll)).expand('right').api.HorizontalAlignment = -4108
+            sht.range('A'+str(rowll)).expand('right').api.VerticalAlignment = -4108
+            # 行高
+            sht.api.Rows(rowl).RowHeight = 20
+            sht.api.Rows(rowll).RowHeight = 20
+        finally:
+            if wb:
+              wb.save()
+              wb.close()
+              app.kill()
     elif args.average:
         # 写入ohm
         try:
