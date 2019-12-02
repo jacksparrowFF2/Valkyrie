@@ -148,6 +148,8 @@ pip3 install xlwings
 pip3 install pywin32
 # Python 中用于传入参数的组件
 pip3 install argparse
+# Python 中用于处理CSV的组件
+pip install pandas
 ```
 
 至此，程序所需运行的环境以及依赖都已准备完毕。
