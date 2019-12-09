@@ -17,7 +17,7 @@ import argparse
 parser = argparse.ArgumentParser('该脚本旨在帮助你计算指定摩尔浓度的溶液所需要的粉末质量')
 
 parser.add_argument('-m', '--mol_mass', metavar = '', type = float, required = True,
-                    help = 'mol/g/摩尔每克')
+                    help = 'g/mol/摩尔每克')
 parser.add_argument('-s', '--solution_volume', metavar = '', type = float, required = True,
                     help = 'ml/毫升')
 parser.add_argument('-c', '--concentration_coefficient', metavar = '', type = float, required = True,
@@ -35,7 +35,7 @@ def calculate_mass(m,s,c,u,p):
     c = args.concentration_coefficient
     u = args.unit
     p = args.purity
-    mass = ((s/1000)*c*u*m)/p
+    mass = ((s/1000)*c*u*m/1000)/p
     return mass
 
 if __name__ == '__main__':
