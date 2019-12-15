@@ -11,9 +11,10 @@
 '''
 
 # here put the import lib
+import os
 from operator import itemgetter
-import win32clipboard as w
 import win32con
+import win32clipboard as w
 import xlwings as xw
 import argparse
 
@@ -313,4 +314,7 @@ if __name__ == '__main__':
         writeclip(out_str)
     else:
         print('请输入 -h 以查看使用说明')
-        input("Press <enter>")
+
+
+
+input("SSS")
