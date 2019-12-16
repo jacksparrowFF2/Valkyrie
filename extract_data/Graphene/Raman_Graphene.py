@@ -299,16 +299,25 @@ if __name__ == '__main__':
                 # 结束进程
                 app.kill
     elif args.cfit:
-        print('cfit')
+        print('模式：cfit')
+        # 获取拟合结果
         temp_list = fitformat(getclip())
+        # print(temp_list)
+        # 初始化输出列表
         out_list = []
+        t = 0
+        # 去除最后一个峰
         for i in temp_list:
-            out_list.append(i[2]+'\t')
-            out_list.append(i[3]+'\t')
-        out_list[7] = out_list[7].replace('\t', '')
-        print(out_list[7])
-        del out_list[8:10]
+            if t < 4:
+                out_list.append(i[5]+'\t')
+                out_list.append(i[2]+'\t')
+                out_list.append(i[3]+'\t')
+                t = t + 1
         print(out_list)
+        # 创建隔断符号
+        out_list[-1] = out_list[-1].replace('\t', '')
+        print(out_list[-1])
+        # print(out_list)
         out_str = "".join(out_list)
         print(out_str)
         writeclip(out_str)
