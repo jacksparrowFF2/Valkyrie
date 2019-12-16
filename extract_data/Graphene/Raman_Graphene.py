@@ -314,7 +314,5 @@ if __name__ == '__main__':
         writeclip(out_str)
     else:
         print('请输入 -h 以查看使用说明')
-
-
-
-input("SSS")
+        input("SSS")
+        
