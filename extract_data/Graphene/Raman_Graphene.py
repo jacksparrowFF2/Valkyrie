@@ -302,7 +302,7 @@ if __name__ == '__main__':
         print('模式：cfit')
         # 获取拟合结果
         temp_list = fitformat(getclip())
-        # print(temp_list)
+        print(temp_list)
         # 初始化输出列表
         out_list = []
         t = 0
