@@ -28,7 +28,11 @@ kB = 1.380649E-23
 elec = 1.6021766208E-19
 # 构建复合因子
 a = elec/(kB*T)
+a2 = (kB*T)/elec
 print(a)
+print(a2)
+
+
 # 引入J-V数据（A cm^-2-V）
 V = 0.25
 J = 0.25
