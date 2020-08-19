@@ -94,7 +94,7 @@ if __name__ == '__main__':
         print('Copyselect')
         infile = args.input
         All_data = infile.readlines()
-        in_xrddata = All_data[141:]
+        in_xrddata = All_data[136:]
         print("你选择输出的数据列为：%s" %(args.column))
         # print(in_xrddata)
         temp = remove_comma(in_xrddata)
@@ -105,7 +105,7 @@ if __name__ == '__main__':
         print('Copyall')
         infile = args.input
         All_data = infile.readlines()
-        in_xrddata = All_data[141:]
+        in_xrddata = All_data[136:]
         # remove_comma(in_xrddata)
         temp = remove_comma(in_xrddata)
         output_xrddata = output_all(temp)
