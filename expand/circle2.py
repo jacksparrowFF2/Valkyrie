@@ -12,8 +12,14 @@
 
 # here put the import lib
 import matplotlib.pyplot as plt
+import numpy as np
 # hear is the code 
-# 获取用户输入高度H值
+# 生成高度及半径序列
+H = np.linspace(0.000000000000001,40,5)
+print(H)
+R = [x/4 + (360*90)/x for x in H]
+print(R)
+""" # 获取用户输入高度H值
 H = float(input("please enter H value: "))
 print(H)
 # 圆弧半径R
@@ -31,4 +37,4 @@ plt.gcf().gca().add_artist(circle)
 # plt.axis('equal')
 plt.xlim(0,400)
 plt.ylim(0,100)
-plt.show()
+plt.show() """
