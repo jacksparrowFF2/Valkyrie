@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
 @File    :   circle.py
@@ -11,13 +10,13 @@
 '''
 
 # here put the import lib
-
+import matplotlib.pyplot as plt
 # here is the code
 # 定义点类
 class Point():
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    def __init__(self,t):
+        self.x = t[0]
+        self.y = t[1]
 
 # 定义圆心计算函数
 def getCircle(p1, p2, p3):
@@ -35,13 +34,35 @@ def getCircle(p1, p2, p3):
     R = ((p1.x - x0) ** 2 + (p1.y - y0) ** 2) ** 0.5
     return x0, y0, R
 
-
-p1, p2, p3 = Point(0, 0), Point(4.5, 0), Point(2, 2)
+# p1, p2, p3 = Point(0, 0), Point(4.5, 0), Point(2, 2)
+# 获取用户输入坐标值
+# 简化之后：
+p1 = Point(tuple([eval(x) for x in input("please enter first point: ").split(",")]))
+p2 = Point(tuple([eval(x) for x in input("please enter second point: ").split(",")]))
+p3 = Point(tuple([eval(x) for x in input("please enter third point: ").split(",")]))
+print(p1)
+print(p2)
+print(p3)
+# 参数设置
 # 一次性输出全部信息：横坐标，纵坐标，半径
 print(getCircle(p1, p2, p3))
 # 输出横坐标
-print(getCircle(p1, p2, p3)[0])
+x = getCircle(p1, p2, p3)[0]
+print(x)
 # 输出纵坐标
-print(getCircle(p1, p2, p3)[1])
+y = getCircle(p1, p2, p3)[1]
+print(y)
 # 输出三点共圆半径
-print(getCircle(p1, p2, p3)[2])
+r = getCircle(p1, p2, p3)[2]
+print(r)
+
+# 画圆
+fig = plt.figure(figsize=(10, 10))
+
+circle = plt.Circle((x, y), r, color='y', fill=False)
+plt.gcf().gca().add_artist(circle)
+
+plt.axis('equal')
+plt.xlim(-50, 50)
+plt.ylim(-50, 50)
+plt.show()
