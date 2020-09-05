@@ -16,12 +16,12 @@ import numpy as np
 import xlwings as xw
 import argparse
 # hear is the code 
-""" # 函数构建
+# 函数构建
 # 切片次数
-t = 10
+t = 100
 n = 90
 # 生成 z 轴坐标序列
-Z = list(range(0, t, 1))
+Z = list(range(0,t,1))
 # print(Z)
 # 生成高度序列
 H = list(np.linspace(0.000000000000001,40,t))
@@ -30,11 +30,11 @@ H = list(np.linspace(0.000000000000001,40,t))
 R = [x/4 + (360*90)/x for x in H]
 # 限定 X 轴坐标
 x0 = np.linspace(-450,-360,n)
-x1 = np.linspace(-360,-180,360)
-temp1 = np.linspace(0,180,360)
-x2= np.linspace(-180,180,720)
-x3 = np.linspace(180,360,360)
-temp2 = np.linspace(-180,0,360)
+x1 = np.linspace(-360,-180,4*n)
+temp1 = np.linspace(0,180,4*n)
+x2= np.linspace(-180,180,8*n)
+x3 = np.linspace(180,360,4*n)
+temp2 = np.linspace(-180,0,4*n)
 x4 = np.linspace(360,450,n)
 x = list(x0) + list(x1) + list(x2) + list(x3) + list(x4)
 # print(x)
@@ -60,9 +60,9 @@ for i in range(len(H)):
     # plt.plot(x3,y3)
     # plt.plot(x4,y4)
     plt.pause(0.05)
-plt.show() """
+plt.show()
 
-""" """ # 创建 Excel
+""" # 创建 Excel
 parser = argparse.ArgumentParser(description = 'create excel in your select path')
 
 parser.add_argument('-i','--input', metavar='', type=str, required = True, help = 'where your want to creat excel')
@@ -83,7 +83,7 @@ if __name__ == '__main__':
         print('开始计算数据并写入')
         # 函数构建
         # 切片次数
-        t = 10
+        t = 400
         n = 90
         # 生成 z 轴坐标序列
         Z = list(range(0, t, 1))
@@ -145,9 +145,7 @@ if __name__ == '__main__':
         if wb:
             wb.save(args.input)
             wb.close()
-            app.kill()
- """
- """
+            app.kill() """
 
 
 
