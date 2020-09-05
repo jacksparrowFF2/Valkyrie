@@ -54,11 +54,6 @@ for i in range(len(H)):
     # plt.axis('equal')
     # plt.ylim(0, 50)
     plt.plot(x,y)
-    # plt.plot(x0,y0)
-    # plt.plot(x1,y1)
-    # plt.plot(x2,y2)
-    # plt.plot(x3,y3)
-    # plt.plot(x4,y4)
     plt.pause(0.05)
 plt.show() """
 
