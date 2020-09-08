@@ -66,6 +66,8 @@ for i in range(len(H)):
 # verts = [(0,0,0),(1,0,0),(2,0,0),(3,0,0),(4,0,0),(0,1,0),(1,1,0),(2,1,0),(3,1,0),(4,1,0)]
 # print(verts)
 print(len(verts))
+print(len(x))
+print(len(Z))
 """ # 构造边 x 方向
 print("构造边 x 方向")
 edge_xa = list(range(0,len(verts),1))
@@ -116,7 +118,7 @@ print(faces) """
 
 verts = list(map(str,verts))
 verts = [x.replace('(','').replace(')','') for x in verts]
-
+""" 
 if __name__ == '__main__':
     try:        
         app = xw.App(visible=True,add_book=False)
@@ -141,4 +143,4 @@ if __name__ == '__main__':
         if wb:
             wb.save(args.input)
             # wb.close()
-            # app.kill()
+            # app.kill() """
