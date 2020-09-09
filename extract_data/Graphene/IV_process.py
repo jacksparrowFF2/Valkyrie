@@ -17,17 +17,21 @@ import win32con
 import numpy as np
 import math
 
-parser = argparse.ArgumentParser(description='该脚本用于对暗态IV数据进行处理')
+parser = argparse.ArgumentParser(description='该脚本用于对石墨烯IV数据进行处理')
 
-parser.add_argument('-i', '--input', metavar='',
+parser.add_argument('-i', '--input_data', metavar='',
+                    type=argparse.FileType(mode='r'))
+parser.add_argument('-i2', '--input_area', metavar='',
                     type=argparse.FileType(mode='r'))
 parser.add_argument('-n', '--factor', metavar='',
                     type=float)
 
 parser.add_argument_group('基础选项')
-parser.add_argument('-c', '--copy', action='store_true', help='将数据写入到剪贴板中')
+parser.add_argument('-c', '--copy', action='store_true', help='将所有数据写入到剪贴板中')
+parser.add_argument('-col', "--column", metavar = '', type=int, help='要提取的数据列')
 parser.add_argument('-s1', '--step1', action='store_true', help='第一阶段数据处理')
 parser.add_argument('-s2', '--step2', action='store_true', help='第二阶段数据处理')
+
 
 groupA = parser.add_mutually_exclusive_group()
 # parser.add_mutually_exclusive_group('高级选项')
@@ -35,9 +39,13 @@ groupA.add_argument('-l', '--light', action='store_true', help='光照IV')
 groupA.add_argument('-d', '--dark', action='store_true', help='暗态IV')
 
 groupB = parser.add_mutually_exclusive_group()
+groupB.add_argument('-a', '--all', action='store_true', help='在剪贴板显示出当前txt文件的所有数据')
+groupB.add_argument('-s', '--select', action='store_true', help='提取指定数据列到剪贴板')
+
+groupC = parser.add_mutually_exclusive_group()
 # parser.add_mutually_exclusive_group('高级选项')
-groupB.add_argument('-f1', '--floor1', action='store_true', help='一楼IV测试设备')
-groupB.add_argument('-f2', '--floor2', action='store_true', help='二楼IV测试设备')
+groupC.add_argument('-f1', '--floor1', action='store_true', help='一楼IV测试设备')
+groupC.add_argument('-f2', '--floor2', action='store_true', help='二楼IV测试设备')
 
 args = parser.parse_args()
 
@@ -79,6 +87,35 @@ def data_process(parameter_list):
     out_str = ''.join(out_list)
     print('输出第三阶段数据处理结果')
     return out_str
+def str2fstr(astring):
+    in_str = astring.replace('\n', '')
+    temp_list = in_str.split(':')
+    i = temp_list[1].lstrip()
+    return(i)
+
+def ftime(astring):
+    in_str = astring.replace('\n', '')
+    temp_list = in_str.split(' ')
+    i = temp_list[3] + ' ' + temp_list[4]
+    return(i)
+
+def selectcolumn_str(astring,column):
+    out_select_list  = []
+    for i in astring:
+        templist = i.replace('\n','').split('\t')
+        out_select_list.append(templist[column])
+    return(out_select_list)
+
+def selectcolumn_del(astring,column):
+    out_select_list  = []
+    for i in astring:
+        templist = i.replace('\n','').split('\t')
+        templist.pop(column)
+        tempstr = "\t".join(templist)
+        out_select_list.append(tempstr)
+        out_str = "\n".join(out_select_list) 
+    return(out_str)
+
 
 if __name__ == '__main__':
     if args.floor1:
@@ -135,7 +172,44 @@ if __name__ == '__main__':
                     writeclip(out_str)
                 else:
                     print('请选择处理阶段')
-        print('处理结束')
+        if args.light:
+            if args.all:
+                # 文件路径赋值给 infile
+                infile = args.input_data
+                # 从第 22 行处开始读取 txt 文件
+                All_data = infile.readlines()
+                filecontents = All_data[22:]
+                print("this is all experiment dcleaata you get from test, you can find it in your clipborad")
+                print("txt中的实验数据为：")
+                print("I(A)\tV(V)\tP(mW)")
+                # print(filecontents)
+                str_filecontents = "".join(filecontents)
+                print(str_filecontents)
+                # 写入剪贴板
+                writeclip(str_filecontents)
+            elif args.select:
+                # 文件路径赋值给 infile
+                infile = args.input_data
+                # 从第 20 行处开始读取 txt 文件
+                All_data = infile.readlines()
+                filecontents = All_data[22:]
+                # print(filecontents)
+                # print(type(filecontents))
+                print("你选择输出的是第 %s 列" % (args.column))
+                # 转化至程序排序方式
+                n = args.column - 1
+                print(n)
+                # 去除可能存在的换行符
+                while '\n' in filecontents:
+                    filecontents.remove('\n')
+                # 构建格式化列表
+                out_select_list = selectcolumn_str(filecontents,n)
+                # print(out_select_list)
+                str_data = "\n".join(out_select_list)
+                print(str_data)
+                writeclip(str_data)
+            else:
+                print("请选择处理模式")
     elif args.floor2:
         if args.dark:
             if args.copy:
@@ -167,7 +241,6 @@ if __name__ == '__main__':
                 J_1000 = list(map(lambda x: x*1000, J))
                 # 构建正常 J 数组，单位为 mA/cm2
                 rJ_1000 = list(map(lambda x: -x*1000, J))
-                
                 # print(HJ)
                 if args.step1:
                     name = ['Voltage', 'I', 'Power', 'J', 'lnJ', 'J_1000', 'rJ_1000']
@@ -216,4 +289,4 @@ if __name__ == '__main__':
                     print('请选择处理阶段')
         print('处理结束')
     else:
-      print('请选择测试设备所在楼层、数据处理阶段')
+      print('请选择测试设备所在楼层、处理模式、数据处理阶段')

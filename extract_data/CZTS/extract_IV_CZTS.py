@@ -64,7 +64,7 @@ if __name__ == '__main__':
     if args.copy:
         infile = args.input
         All_data = infile.readlines()
-        print(All_data[10])
+        print(All_data[10:])
         writeclip(All_data[10])
     elif args.write:
         infile = args.input

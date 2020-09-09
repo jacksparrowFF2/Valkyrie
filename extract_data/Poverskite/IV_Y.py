@@ -88,7 +88,7 @@ if __name__ == '__main__':
         infile = args.input
         # 从第 30 行处开始读取 txt 文件
         All_data = infile.readlines()
-        filecontents = All_data[30:]
+        filecontents = All_data[22:]
         print("你选择输出的是第 %s 列" % (args.column))
         # 转化至程序排序方式
         n = args.column - 1
@@ -113,12 +113,12 @@ if __name__ == '__main__':
     elif args.all:
         # 文件路径赋值给 infile
         infile = args.input
-        # 从第 30 行处开始读取 txt 文件
+        # 从第 22 行处开始读取 txt 文件
         All_data = infile.readlines()
-        filecontents = All_data[30:]
+        filecontents = All_data[22:]
         print("this is all experiment dcleaata you get from test, you can find it in your clipborad")
         print("txt中的实验数据为：")
-        print("I(A)\tV(V)\tP(W)")
+        print("I(A)\tV(V)\tP(mW)")
         # print(filecontents)
         str_filecontents = "".join(filecontents)
         print(str_filecontents)
