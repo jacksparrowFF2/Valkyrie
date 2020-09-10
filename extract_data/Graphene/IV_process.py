@@ -44,7 +44,8 @@ groupA.add_argument('-D', '--Dark', action='store_true', help='暗态IV')
 groupB = parser.add_mutually_exclusive_group()
 groupB.add_argument('-a', '--all', action='store_true', help='在剪贴板显示出当前txt文件的所有数据')
 groupB.add_argument('-s', '--select', action='store_true', help='提取指定数据列到剪贴板')
-groupB.add_argument('-w', '--write', action='store_true', help='写入电压电流数据数据到excel文件中')
+groupB.add_argument('-wm', '--write_metadata', action='store_true', help='写入电压电流原始数据到excel文件中')
+groupB.add_argument('-ws', '--write_statistics', action='store_true', help='写入电压电流统计数据到excel文件中')
 
 groupC = parser.add_mutually_exclusive_group()
 # parser.add_mutually_exclusive_group('高级选项')
@@ -97,6 +98,15 @@ def str2fstr(astring):
     temp_list = in_str.split(':')
     i = temp_list[1].lstrip()
     return(i)
+
+def str2list(astring):
+    in_str = astring.replace('\n', '')
+    temp_list = in_str.split('\t')
+    out_list = []
+    for i in temp_list:
+        i = i.lstrip()
+        out_list.append(i)
+    return(out_list)
 
 def ftime(astring):
     in_str = astring.replace('\n', '')
@@ -215,7 +225,7 @@ if __name__ == '__main__':
                 str_data = "\n".join(out_select_list)
                 print(str_data)
                 writeclip(str_data)
-            elif args.write:
+            elif args.write_metadata:
                 # 文件路径赋值给 infile
                 infile = args.input_data
                 # 从第 20 行处开始读取 txt 文件
@@ -223,9 +233,9 @@ if __name__ == '__main__':
                 filecontents = All_data[22:]
                 # print(filecontents)
                 # 面积文件路径赋值给 Ainfile
-                infile = args.input_area
+                Ainfile = args.input_area
                 # 从第 2 行处开始读取 txt 文件
-                A_All_data = infile.readlines()
+                A_All_data = Ainfile.readlines()
                 Area = A_All_data[1:]
                 # 去除可能存在的换行符
                 while '\n' in filecontents:
@@ -276,6 +286,64 @@ if __name__ == '__main__':
                         # 填写y坐标数据
                         sht.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y
                         print('注入完成')
+                    print('实验数据注入完成！')
+                finally:
+                    if wb:
+                        wb.save()
+                        wb.close()
+                        app.kill()
+            elif args.write_statistics:
+                # 文件路径赋值给 infile
+                infile = args.input_data
+                # 从第 9 行处开始读取 txt 文件
+                All_data = infile.readlines()
+                filecontents = All_data[9:]
+                # print(filecontents)
+                # 获取编号
+                Material = str2list(All_data[4:5][0])[1]
+                print(Material)
+                # 面积文件路径赋值给 Ainfile
+                Ainfile = args.input_area
+                # 从第 2 行处开始读取 txt 文件
+                A_All_data = Ainfile.readlines()
+                Area = A_All_data[1:]
+                # 去除可能存在的换行符
+                while '\n' in filecontents:
+                    filecontents.remove('\n')
+                while '\n' in Area:
+                    filecontents.remove('\n')
+                # 构建面积列表
+                A = selectcolumn_str(Area,2)
+                print(A)
+                # 构建格式化列表-y
+                y = str2list(filecontents[1])
+                y[0] = Material
+                print(y)
+                try:        
+                    inexcel = args.excel
+                    print('你输入的文件路径为：'+inexcel)
+                    app = xw.App(visible=False,add_book=False)
+                    wb = app.books.open(inexcel)
+                    sht = wb.sheets['statistics metadata']
+                    # 获取表格坐标信息
+                    info = sht.range('A1').expand('table')
+                    row = info.last_cell.row
+                    col = info.last_cell.column
+                    print('原表格最后一行：'+str(row))
+                    # 计算出要添加的一行位置
+                    rowl = row + 1
+                    print('数据添加所在行：'+str(rowl))
+                    # 计算eff矫正效率
+                    n = 0.45/(float(A[row-1])/100)
+                    eff = str(float(y[-1])*n)
+                    print(eff)
+                    y = y + [str(n),str(eff)]
+                    print(y)
+                    print("开始填写excel")
+                    # 输出结果
+                    # 填写y坐标数据
+                    sht.range('A'+str(rowl),'O'+str(rowl)).value = y
+                    print('注入完成')
                     print('实验数据注入完成！')
                 finally:
                     if wb:
@@ -364,13 +432,28 @@ if __name__ == '__main__':
         print('处理结束')
     elif args.creat:
         print("开始创建excel")
+        name = ['Material', 'Time/s', 'Serial NO.', 'Voc/V', 'Isc/mA', 'Pmax/mW', 'Vpmax/V', 'Ipmax/mA', 'Rs/ohm', 'Rsh/ohm', 'Jsc/mA.cm-2', 'FF', 'η/%', 'n', 'eff']
         try:
-            app = xw.App(visible=True,add_book=False)
+            app = xw.App(visible=False,add_book=False)
             # wb = app.books.add()
             wb = app.books.add()
             wb.sheets["sheet1"].name = "Dark I-V metadata"
             wb.sheets.add("sheet2")
             wb.sheets["sheet2"].name = "Light I-V metadata"
+            wb.sheets.add("sheet3")
+            wb.sheets["sheet3"].name = "statistics metadata"
+            sht = wb.sheets['statistics metadata']
+            sht.range('A1','O1').value = name
+            # 格式化
+            # 对表格进行美化
+            # 对第一行标题进行格式化
+            sht.range('A1').expand('right').api.HorizontalAlignment = -4108
+            sht.range('A1').expand('right').api.VerticalAlignment = -4108
+            # 行高
+            sht.api.Rows(1).RowHeight = 20
+            # 列宽
+            sht.api.Columns("A:N").Columnwidth = 15
+            print('格式化完成')
         finally:
             if wb:
                 wb.save(args.excel)
