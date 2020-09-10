@@ -224,7 +224,7 @@ if __name__ == '__main__':
             # print(info)
             row = info.last_cell.row
             col = info.last_cell.column
-            # 计算出要添加的一行位置
+            # 计算出要添加的一列位置
             coll = col + 1
             str_coll = str(coll)
             print('数据添加所在列：'+str_coll)

@@ -73,7 +73,7 @@ if __name__ == '__main__':
         # print(name)
         data = str2list(All_data[10])
         print(data)
-        try:
+        """ try:
             inexcel = args.excel
             app = xw.App(visible=False,add_book = False)
             wb = app.books.open(inexcel)
@@ -105,7 +105,7 @@ if __name__ == '__main__':
             if wb:
                 wb.save()
                 wb.close()
-                app.kill()
+                app.kill() """
     else:
         print('请输入 -h 以查看帮助')
     

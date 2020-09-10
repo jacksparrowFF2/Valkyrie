@@ -25,7 +25,6 @@ args = parser.parse_args()
 if __name__ == '__main__':
     try:
         app = xw.App(visible=False,add_book=False)
-        # wb = app.books.add()
         wb = app.books.add()
         wb.sheets["sheet1"].name = "I-V Performance"
         sht = wb.sheets['I-V Performance']
@@ -48,12 +47,12 @@ if __name__ == '__main__':
         sht.range('A1','N1').value = name
         # 格式化
         # 对表格进行美化
-            # 对第一行标题进行格式化
+        # 对第一行标题进行格式化
         sht.range('A1').expand('right').api.HorizontalAlignment = -4108
         sht.range('A1').expand('right').api.VerticalAlignment = -4108
-            # 行高
+        # 行高
         sht.api.Rows(1).RowHeight = 20
-            # 列宽
+        # 列宽
         sht.api.Columns("A:L").Columnwidth = 15
         sht.api.Columns("M:N").Columnwidth = 28
         print('表 1：I-V Performance 创建完成')

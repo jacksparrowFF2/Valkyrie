@@ -15,6 +15,7 @@ import argparse
 import win32clipboard as w
 import win32con
 import numpy as np
+import xlwings as xw
 import math
 
 parser = argparse.ArgumentParser(description='该脚本用于对石墨烯IV数据进行处理')
@@ -23,6 +24,8 @@ parser.add_argument('-i', '--input_data', metavar='',
                     type=argparse.FileType(mode='r'))
 parser.add_argument('-i2', '--input_area', metavar='',
                     type=argparse.FileType(mode='r'))
+parser.add_argument('-e', '--excel', metavar = '', type = str, 
+                    help = '保存数据的 excel 文件路径')
 parser.add_argument('-n', '--factor', metavar='',
                     type=float)
 
@@ -35,15 +38,17 @@ parser.add_argument('-s2', '--step2', action='store_true', help='第二阶段数
 
 groupA = parser.add_mutually_exclusive_group()
 # parser.add_mutually_exclusive_group('高级选项')
-groupA.add_argument('-l', '--light', action='store_true', help='光照IV')
-groupA.add_argument('-d', '--dark', action='store_true', help='暗态IV')
+groupA.add_argument('-L', '--Light', action='store_true', help='光照IV')
+groupA.add_argument('-D', '--Dark', action='store_true', help='暗态IV')
 
 groupB = parser.add_mutually_exclusive_group()
 groupB.add_argument('-a', '--all', action='store_true', help='在剪贴板显示出当前txt文件的所有数据')
 groupB.add_argument('-s', '--select', action='store_true', help='提取指定数据列到剪贴板')
+groupB.add_argument('-w', '--write', action='store_true', help='写入电压电流数据数据到excel文件中')
 
 groupC = parser.add_mutually_exclusive_group()
 # parser.add_mutually_exclusive_group('高级选项')
+groupC.add_argument('-C', '--creat', action='store_true', help='创建Excel文件')
 groupC.add_argument('-f1', '--floor1', action='store_true', help='一楼IV测试设备')
 groupC.add_argument('-f2', '--floor2', action='store_true', help='二楼IV测试设备')
 
@@ -116,10 +121,12 @@ def selectcolumn_del(astring,column):
         out_str = "\n".join(out_select_list) 
     return(out_str)
 
+def correct(x,y):
+    pass
 
 if __name__ == '__main__':
     if args.floor1:
-        if args.dark:
+        if args.Dark:
             if args.copy:
                 infile = args.input
                 All_data = infile.readlines()
@@ -172,7 +179,7 @@ if __name__ == '__main__':
                     writeclip(out_str)
                 else:
                     print('请选择处理阶段')
-        if args.light:
+        if args.Light:
             if args.all:
                 # 文件路径赋值给 infile
                 infile = args.input_data
@@ -208,6 +215,73 @@ if __name__ == '__main__':
                 str_data = "\n".join(out_select_list)
                 print(str_data)
                 writeclip(str_data)
+            elif args.write:
+                # 文件路径赋值给 infile
+                infile = args.input_data
+                # 从第 20 行处开始读取 txt 文件
+                All_data = infile.readlines()
+                filecontents = All_data[22:]
+                # print(filecontents)
+                # 面积文件路径赋值给 Ainfile
+                infile = args.input_area
+                # 从第 2 行处开始读取 txt 文件
+                A_All_data = infile.readlines()
+                Area = A_All_data[1:]
+                # 去除可能存在的换行符
+                while '\n' in filecontents:
+                    filecontents.remove('\n')
+                while '\n' in Area:
+                    filecontents.remove('\n')
+                # 构建面积列表
+                A = selectcolumn_str(Area,2)
+                A = list(map(float,A))
+                print(A)
+                # 构建格式化列表-x
+                x = selectcolumn_str(filecontents,0)
+                # 构建格式化列表-y
+                y = selectcolumn_str(filecontents,1)
+                y = np.array(list(map(float,y)))
+                print("开始填写excel")
+                try:        
+                    inexcel = args.excel
+                    print('你输入的文件路径为：'+inexcel)
+                    app = xw.App(visible=False,add_book=False)
+                    wb = app.books.open(inexcel)
+                    sht = wb.sheets['Light I-V metadata']
+                    # 获取表格坐标信息
+                    info = sht.range('A1').expand('table')
+                    row = info.last_cell.row
+                    col = info.last_cell.column
+                    # 计算出要添加的一列位置
+                    coll = col + 1
+                    str_coll = str(coll)
+                    print('数据添加所在列：'+str_coll)
+                    str_col = str(col)
+                    print('原表格最后一列：'+str_col)
+                    y = list(map(str,list(y/A[coll-2]*100)))
+                    # 设定名称
+                    name = ["V(V)", "Jsc(mA/cm2)"+str(col)]
+                    # 输出结果
+                    if col == 1:
+                        # 填写坐标名称
+                        sht.range((1,col),(1,coll)).options(transpose = False).value = name
+                        # 填写X坐标数据
+                        sht.range((2,col),(2+len(x),col)).options(transpose = True).value = x
+                        # 填写y坐标数据
+                        sht.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y
+                        print('注入完成')
+                    else:
+                        # 填写坐标名称
+                        sht.range((1,coll),(1,coll)).options(transpose = False).value = name[1]
+                        # 填写y坐标数据
+                        sht.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y
+                        print('注入完成')
+                    print('实验数据注入完成！')
+                finally:
+                    if wb:
+                        wb.save()
+                        wb.close()
+                        app.kill()
             else:
                 print("请选择处理模式")
     elif args.floor2:
@@ -288,5 +362,19 @@ if __name__ == '__main__':
                 else:
                     print('请选择处理阶段')
         print('处理结束')
+    elif args.creat:
+        print("开始创建excel")
+        try:
+            app = xw.App(visible=True,add_book=False)
+            # wb = app.books.add()
+            wb = app.books.add()
+            wb.sheets["sheet1"].name = "Dark I-V metadata"
+            wb.sheets.add("sheet2")
+            wb.sheets["sheet2"].name = "Light I-V metadata"
+        finally:
+            if wb:
+                wb.save(args.excel)
+                wb.close()
+                app.kill()
     else:
-      print('请选择测试设备所在楼层、处理模式、数据处理阶段')
+        print('请选择测试设备所在楼层、处理模式、数据处理阶段')
