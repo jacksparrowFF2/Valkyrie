@@ -131,8 +131,6 @@ def selectcolumn_del(astring,column):
         out_str = "\n".join(out_select_list) 
     return(out_str)
 
-def correct(x,y):
-    pass
 
 if __name__ == '__main__':
     if args.floor1:
