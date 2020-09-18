@@ -11,6 +11,7 @@
 '''
 
 # here put the import lib
+import os
 import argparse
 import win32clipboard as w
 import win32con
@@ -135,7 +136,126 @@ def selectcolumn_del(astring,column):
 if __name__ == '__main__':
     if args.floor1:
         if args.Dark:
-            if args.copy:
+            if args.all:
+                # 文件路径赋值给 infile
+                infile = args.input_data
+                # 从第 13 行处开始读取 txt 文件
+                All_data = infile.readlines()
+                filecontents = All_data[13:]
+                print("this is all experiment dcleaata you get from test, you can find it in your clipborad")
+                print("txt中的实验数据为：")
+                print("I(A)\tV(V)\tP(mW)")
+                # print(filecontents)
+                str_filecontents = "".join(filecontents)
+                print(str_filecontents)
+                # 写入剪贴板
+                writeclip(str_filecontents)
+            elif args.select:
+                # 文件路径赋值给 infile
+                infile = args.input_data
+                # 从第 20 行处开始读取 txt 文件
+                All_data = infile.readlines()
+                filecontents = All_data[13:]
+                # print(filecontents)
+                # print(type(filecontents))
+                print("你选择输出的是第 %s 列" % (args.column))
+                # 转化至程序排序方式
+                n = args.column - 1
+                print(n)
+                # 去除可能存在的换行符
+                while '\n' in filecontents:
+                    filecontents.remove('\n')
+                # 构建格式化列表
+                out_select_list = selectcolumn_str(filecontents,n)
+                # print(out_select_list)
+                str_data = "\n".join(out_select_list)
+                print(str_data)
+                writeclip(str_data)
+            elif args.write_metadata:
+                # 文件路径赋值给 infile
+                infile = args.input_data
+                # 获取输入文件的项目编号
+                item = os.path.split(str(infile))[1].split('.')[0].split('_')[0]
+                print(item)
+                print(type(item))
+                # 面积文件路径赋值给 Ainfile
+                Ainfile = args.input_area
+                # 从第 2 行处开始读取 txt 文件
+                A_All_data = Ainfile.readlines()
+                Area = A_All_data[1:]
+                # 构建面积列表
+                A = selectcolumn_str(Area,2)
+                A = list(map(float,A))
+                print(A)
+                # 构建定位标识
+                A_index = selectcolumn_str(Area,0)
+                A_index = list(map(int,A_index))
+                print(A_index)
+                # 找到输入文件对应的面积在列表中的位置
+                p = A_index.index(int(item))
+                print(p)
+                # 输出对应的面积
+                P = A[p]
+                print(P)
+                print(type(P))
+                # 从第 13 行处开始读取 txt 文件
+                All_data = infile.readlines()
+                filecontents = All_data[13:]
+                # print(filecontents)
+                # 去除可能存在的换行符
+                while '\n' in filecontents:
+                    filecontents.remove('\n')
+                while '\n' in Area:
+                    filecontents.remove('\n')
+                # 构建格式化列表-x
+                x = selectcolumn_str(filecontents,0)
+                # 构建格式化列表-y
+                y = selectcolumn_str(filecontents,1)
+                y = np.array(list(map(float,y)))
+                print("开始填写excel")
+                try:        
+                    inexcel = args.excel
+                    print('你输入的文件路径为：'+inexcel)
+                    app = xw.App(visible=False,add_book=False)
+                    wb = app.books.open(inexcel)
+                    sht = wb.sheets['Dark I-V metadata']
+                    # 获取表格坐标信息
+                    info = sht.range('A1').expand('table')
+                    row = info.last_cell.row
+                    col = info.last_cell.column
+                    # 计算出要添加的一列位置
+                    coll = col + 1
+                    str_coll = str(coll)
+                    print('数据添加所在列：'+str_coll)
+                    str_col = str(col)
+                    print('原表格最后一列：'+str_col)
+                    y = list(map(str,list(y/P*100)))
+                    # 设定名称
+                    name = ["V(V)", "Jsc(mA/cm2)"+str(col)]
+                    # 输出结果
+                    if col == 1:
+                        # 填写坐标名称
+                        sht.range((1,col),(1,coll)).options(transpose = False).value = name
+                        # 填写X坐标数据
+                        sht.range((2,col),(2+len(x),col)).options(transpose = True).value = x
+                        # 填写y坐标数据
+                        sht.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y
+                        print('注入完成')
+                    else:
+                        # 填写坐标名称
+                        sht.range((1,coll),(1,coll)).options(transpose = False).value = name[1]
+                        # 填写y坐标数据
+                        sht.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y
+                        print('注入完成')
+                    print('实验数据注入完成！')
+                finally:
+                    if wb:
+                        wb.save()
+                        wb.close()
+                        app.kill()
+            else:
+                print("请选择处理模式")
+            """ if args.copy:
                 infile = args.input
                 All_data = infile.readlines()
                 # print(All_data)
@@ -186,7 +306,7 @@ if __name__ == '__main__':
                     # print(out_str)
                     writeclip(out_str)
                 else:
-                    print('请选择处理阶段')
+                    print('请选择处理阶段') """
         if args.Light:
             if args.all:
                 # 文件路径赋值给 infile
@@ -226,24 +346,39 @@ if __name__ == '__main__':
             elif args.write_metadata:
                 # 文件路径赋值给 infile
                 infile = args.input_data
-                # 从第 20 行处开始读取 txt 文件
-                All_data = infile.readlines()
-                filecontents = All_data[22:]
-                # print(filecontents)
+                # 获取输入文件的项目编号
+                item = os.path.split(str(infile))[1].split('.')[0].split('_')[0]
+                print(item)
+                print(type(item))
                 # 面积文件路径赋值给 Ainfile
                 Ainfile = args.input_area
                 # 从第 2 行处开始读取 txt 文件
                 A_All_data = Ainfile.readlines()
                 Area = A_All_data[1:]
+                # 构建面积列表
+                A = selectcolumn_str(Area,2)
+                A = list(map(float,A))
+                print(A)
+                # 构建定位标识
+                A_index = selectcolumn_str(Area,0)
+                A_index = list(map(int,A_index))
+                print(A_index)
+                # 找到输入文件对应的面积在列表中的位置
+                p = A_index.index(int(item))
+                print(p)
+                # 输出对应的面积
+                P = A[p]
+                print(P)
+                print(type(P))
+                # 从第 22 行处开始读取 txt 文件
+                All_data = infile.readlines()
+                filecontents = All_data[22:]
+                # print(filecontents)
                 # 去除可能存在的换行符
                 while '\n' in filecontents:
                     filecontents.remove('\n')
                 while '\n' in Area:
                     filecontents.remove('\n')
-                # 构建面积列表
-                A = selectcolumn_str(Area,2)
-                A = list(map(float,A))
-                print(A)
                 # 构建格式化列表-x
                 x = selectcolumn_str(filecontents,0)
                 # 构建格式化列表-y
@@ -266,7 +401,7 @@ if __name__ == '__main__':
                     print('数据添加所在列：'+str_coll)
                     str_col = str(col)
                     print('原表格最后一列：'+str_col)
-                    y = list(map(str,list(y/A[coll-2]*100)))
+                    y = list(map(str,list(y/P*100)))
                     # 设定名称
                     name = ["V(V)", "Jsc(mA/cm2)"+str(col)]
                     # 输出结果
@@ -305,6 +440,21 @@ if __name__ == '__main__':
                 # 从第 2 行处开始读取 txt 文件
                 A_All_data = Ainfile.readlines()
                 Area = A_All_data[1:]
+                # 构建面积列表
+                A = selectcolumn_str(Area,2)
+                A = list(map(float,A))
+                print(A)
+                # 构建定位标识
+                A_index = selectcolumn_str(Area,0)
+                A_index = list(map(int,A_index))
+                print(A_index)
+                # 找到输入文件对应的面积在列表中的位置
+                p = A_index.index(int(item))
+                print(p)
+                # 输出对应的面积
+                P = A[p]
+                print(P)
+                print(type(P))
                 # 去除可能存在的换行符
                 while '\n' in filecontents:
                     filecontents.remove('\n')
@@ -332,7 +482,7 @@ if __name__ == '__main__':
                     rowl = row + 1
                     print('数据添加所在行：'+str(rowl))
                     # 计算eff矫正效率
-                    n = 0.45/(float(A[row-1])/100)
+                    n = 0.45/(P/100)
                     eff = str(float(y[-1])*n)
                     print(eff)
                     y = y + [str(n),str(eff)]
