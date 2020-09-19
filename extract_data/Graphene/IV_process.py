@@ -434,7 +434,7 @@ if __name__ == '__main__':
                 # print(filecontents)
                 # 获取编号
                 Material = str2list(All_data[4:5][0])[1]
-                print(Material)
+                print(Material)                
                 # 面积文件路径赋值给 Ainfile
                 Ainfile = args.input_area
                 # 从第 2 行处开始读取 txt 文件
@@ -449,7 +449,7 @@ if __name__ == '__main__':
                 A_index = list(map(int,A_index))
                 print(A_index)
                 # 找到输入文件对应的面积在列表中的位置
-                p = A_index.index(int(item))
+                p = A_index.index(int(Material))
                 print(p)
                 # 输出对应的面积
                 P = A[p]
@@ -481,16 +481,20 @@ if __name__ == '__main__':
                     # 计算出要添加的一行位置
                     rowl = row + 1
                     print('数据添加所在行：'+str(rowl))
-                    # 计算eff矫正效率
+                    # 计算倍率
                     n = 0.45/(P/100)
+                    # 计算eff矫正效率
                     eff = str(float(y[-1])*n)
                     print(eff)
-                    y = y + [str(n),str(eff)]
+                    # 计算Jsc矫正电流
+                    Jsc = str(float(y[-3])*n)
+                    # 构建最终数据列
+                    y = y + [str(n),str(Jsc),str(eff)]
                     print(y)
                     print("开始填写excel")
                     # 输出结果
                     # 填写y坐标数据
-                    sht.range('A'+str(rowl),'O'+str(rowl)).value = y
+                    sht.range('A'+str(rowl),'P'+str(rowl)).value = y
                     print('注入完成')
                     print('实验数据注入完成！')
                 finally:
@@ -580,7 +584,7 @@ if __name__ == '__main__':
         print('处理结束')
     elif args.creat:
         print("开始创建excel")
-        name = ['Material', 'Time/s', 'Serial NO.', 'Voc/V', 'Isc/mA', 'Pmax/mW', 'Vpmax/V', 'Ipmax/mA', 'Rs/ohm', 'Rsh/ohm', 'Jsc/mA.cm-2', 'FF', 'η/%', 'n', 'eff']
+        name = ['Material', 'Time/s', 'Serial NO.', 'Voc/V', 'Isc/mA', 'Pmax/mW', 'Vpmax/V', 'Ipmax/mA', 'Rs/ohm', 'Rsh/ohm', 'Jsc/mA.cm-2', 'FF', 'η/%', 'n', 'Jsc','eff']
         try:
             app = xw.App(visible=False,add_book=False)
             # wb = app.books.add()
@@ -591,7 +595,7 @@ if __name__ == '__main__':
             wb.sheets.add("sheet3")
             wb.sheets["sheet3"].name = "statistics metadata"
             sht = wb.sheets['statistics metadata']
-            sht.range('A1','O1').value = name
+            sht.range('A1','P1').value = name
             # 格式化
             # 对表格进行美化
             # 对第一行标题进行格式化
@@ -600,7 +604,7 @@ if __name__ == '__main__':
             # 行高
             sht.api.Rows(1).RowHeight = 20
             # 列宽
-            sht.api.Columns("A:N").Columnwidth = 15
+            sht.api.Columns("A:P").Columnwidth = 15
             print('格式化完成')
         finally:
             if wb:
