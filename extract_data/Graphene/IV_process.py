@@ -213,12 +213,23 @@ if __name__ == '__main__':
                 y = selectcolumn_str(filecontents,1)
                 y = np.array(list(map(float,y)))
                 print("开始填写excel")
+                # 设定名称
+                name = ["V(V)", "Jsc(mA/cm2)"+"-"+str(A_index[p])]
+                name3 = ["V(V)", "Jsc(A/cm2)"+"-"+str(A_index[p])]
+                # A/cm2
+                y3 = list(map(str,list(abs(y/P*100))))
+                # abs mA/cm2
+                y2 = list(map(str,list(abs(y*1000/P*100))))
+                # mA/cm2
+                y = list(map(str,list(y*1000/P*100)))
                 try:        
                     inexcel = args.excel
                     print('你输入的文件路径为：'+inexcel)
                     app = xw.App(visible=False,add_book=False)
                     wb = app.books.open(inexcel)
                     sht = wb.sheets['Dark I-V metadata']
+                    sht2 = wb.sheets['ABSDark I-V metadata']
+                    sht3 = wb.sheets['A-ABSDark I-V metadata']
                     # 获取表格坐标信息
                     info = sht.range('A1').expand('table')
                     row = info.last_cell.row
@@ -229,23 +240,30 @@ if __name__ == '__main__':
                     print('数据添加所在列：'+str_coll)
                     str_col = str(col)
                     print('原表格最后一列：'+str_col)
-                    y = list(map(str,list(y/P*100)))
-                    # 设定名称
-                    name = ["V(V)", "Jsc(mA/cm2)"+str(col)]
                     # 输出结果
                     if col == 1:
                         # 填写坐标名称
                         sht.range((1,col),(1,coll)).options(transpose = False).value = name
+                        sht2.range((1,col),(1,coll)).options(transpose = False).value = name
+                        sht3.range((1,col),(1,coll)).options(transpose = False).value = name3
                         # 填写X坐标数据
                         sht.range((2,col),(2+len(x),col)).options(transpose = True).value = x
+                        sht2.range((2,col),(2+len(x),col)).options(transpose = True).value = x
+                        sht3.range((2,col),(2+len(x),col)).options(transpose = True).value = x
                         # 填写y坐标数据
                         sht.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y
+                        sht2.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y2
+                        sht3.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y3
                         print('注入完成')
                     else:
                         # 填写坐标名称
                         sht.range((1,coll),(1,coll)).options(transpose = False).value = name[1]
+                        sht2.range((1,coll),(1,coll)).options(transpose = False).value = name[1]
+                        sht3.range((1,coll),(1,coll)).options(transpose = False).value = name[1]
                         # 填写y坐标数据
                         sht.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y
+                        sht2.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y2
+                        sht3.range((2,coll),(2+len(x),coll)).options(transpose = True).value = y3
                         print('注入完成')
                     print('实验数据注入完成！')
                 finally:
@@ -403,7 +421,7 @@ if __name__ == '__main__':
                     print('原表格最后一列：'+str_col)
                     y = list(map(str,list(y/P*100)))
                     # 设定名称
-                    name = ["V(V)", "Jsc(mA/cm2)"+str(col)]
+                    name = ["V(V)", "Jsc(mA/cm2)"+"-"+str(A_index[p])]
                     # 输出结果
                     if col == 1:
                         # 填写坐标名称
@@ -589,11 +607,15 @@ if __name__ == '__main__':
             app = xw.App(visible=False,add_book=False)
             # wb = app.books.add()
             wb = app.books.add()
-            wb.sheets["sheet1"].name = "Dark I-V metadata"
+            wb.sheets["sheet1"].name = "A-ABSDark I-V metadata"
             wb.sheets.add("sheet2")
-            wb.sheets["sheet2"].name = "Light I-V metadata"
+            wb.sheets["sheet2"].name = "ABSDark I-V metadata"
             wb.sheets.add("sheet3")
-            wb.sheets["sheet3"].name = "statistics metadata"
+            wb.sheets["sheet3"].name = "Dark I-V metadata"
+            wb.sheets.add("sheet4")
+            wb.sheets["sheet4"].name = "Light I-V metadata"
+            wb.sheets.add("sheet5")
+            wb.sheets["sheet5"].name = "statistics metadata"
             sht = wb.sheets['statistics metadata']
             sht.range('A1','P1').value = name
             # 格式化
