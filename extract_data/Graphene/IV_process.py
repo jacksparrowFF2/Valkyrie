@@ -20,11 +20,13 @@ import xlwings as xw
 import math
 
 parser = argparse.ArgumentParser(description='该脚本用于对石墨烯IV数据进行处理')
-
+# 原始数据文件路径，模式为读
 parser.add_argument('-i', '--input_data', metavar='',
                     type=argparse.FileType(mode='r'))
+# 器件的面积文件路径
 parser.add_argument('-i2', '--input_area', metavar='',
                     type=argparse.FileType(mode='r'))
+# 保存数据的 excel 文件路径
 parser.add_argument('-e', '--excel', metavar = '', type = str, 
                     help = '保存数据的 excel 文件路径')
 parser.add_argument('-n', '--factor', metavar='',
