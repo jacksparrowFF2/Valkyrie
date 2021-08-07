@@ -108,7 +108,7 @@ if __name__ == '__main__':
             # 列名称
             name = ['Voltage(V)', 'Current(A)']
             # 开始循环粘贴复制
-            loop_list = list(range(1,Loop_time))
+            loop_list = list(range(1,Loop_time+1))
             # for i in list(range(0,2)):
             for i in loop_list:
                 # # 循环次数
